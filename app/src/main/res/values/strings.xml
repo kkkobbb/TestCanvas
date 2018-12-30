@@ -1,15 +1,17 @@
 <resources>
     <string name="app_name">TestCanvas</string>
-    <string name="error_string">error</string>
+
     <string name="menu_save">保存</string>
     <string name="menu_copy_path">保存先パスをコピー</string>
-    <string name="menu_copy_shape">図形複製</string>
     <string name="menu_clear">全削除</string>
+    <string name="menu_setting">設定</string>
+
     <string name="button_undo">戻る</string>
     <string name="button_redo">進む</string>
     <string name="button_state_draw">描画</string>
     <string name="button_state_transfer">移動</string>
     <string name="button_state_copy">複製</string>
+
     <string name="shape_base">無</string>
     <string name="shape_line">直線</string>
     <string name="shape_rect">長方形</string>
@@ -19,7 +21,15 @@
     <string name="shape_polygon">多角形</string>
     <string name="shape_polyline">連続直線</string>
     <string name="shape_text">文字列</string>
-    
+
+    <string name="setting_title">設定</string>
+    <string name="setting_shape_appearance">図形の見た目</string>
+    <string name="setting_sa_transfer">「移動」時、対象の図形を強調する</string>
+    <string name="setting_key_sa_transfer">appearance_transfer</string>
+    <string name="setting_sa_undo">「戻る」した図形も表示する</string>
+    <string name="setting_key_sa_undo">appearance_undo</string>
+
+    <string name="error_string">error</string>
     <string-array name="error_shape_types">
         <item>error</item>
     </string-array>

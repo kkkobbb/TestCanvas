@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
@@ -255,8 +256,12 @@ public class DrawingFragment extends Fragment {
                 buttonUndo.setEnabled(shapeManager.canUndo());
                 buttonRedo.setEnabled(shapeManager.canRedo());
 
-                //shapeManager.drawUndo(canvas);  // TODO ややこしいのでとりあえず無効
-                if (state == State.TRANSFER)
+                final Context context = Objects.requireNonNull(getContext());
+                // 戻るした図形の表示
+                if (SettingManager.getShapeAppearanceUndo(context))
+                    shapeManager.drawUndo(canvas);
+                // 移動時の対象図形の強調
+                if (state == State.TRANSFER && SettingManager.getShapeAppearanceTransfer(context))
                     shapeManager.drawShapesLastHighlight(canvas);
                 else
                     shapeManager.drawShapes(canvas);
@@ -344,6 +349,9 @@ public class DrawingFragment extends Fragment {
                 return true;
             case R.id.menu_clear:
                 clearAll();
+                return true;
+            case R.id.menu_setting:
+                setting();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -533,6 +541,14 @@ public class DrawingFragment extends Fragment {
             shapeManager.undo();
 
         drawingView.invalidate();
+    }
+
+    /**
+     * 設定画面の表示
+     */
+    private void setting() {
+        Intent intent = new Intent(getActivity(), SettingActivity.class);
+        startActivity(intent);
     }
 
     private enum State {

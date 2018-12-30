@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/setting_shape_appearance">
+        <SwitchPreference
+            android:title="@string/setting_sa_transfer"
+            android:key="@string/setting_key_sa_transfer"
+            android:defaultValue="true"/>
+        <SwitchPreference
+            android:title="@string/setting_sa_undo"
+            android:key="@string/setting_key_sa_undo"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
