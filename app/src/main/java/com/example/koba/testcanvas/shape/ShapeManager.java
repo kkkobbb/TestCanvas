@@ -3,6 +3,7 @@ package com.example.koba.testcanvas.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
 import com.example.koba.testcanvas.R;
@@ -23,11 +24,13 @@ import javax.xml.parsers.ParserConfigurationException;
 public class ShapeManager {
     private List<ShapeCreator> shapeCreatorList;
     private int selectedShape;
+    @ColorInt private final static int DEFAULT_COLOR = 0xffff00ff;
+    @ColorInt private final static int UNDO_COLOR = 0x20000000;
+    @ColorInt private final static int HIGHLIGHT_COLOR = DEFAULT_COLOR;
+    @ColorInt private final static int NO_HIGHLIGHT_COLOR = 0x30ff00ff;
     private final static float DEFAULT_STROKE_WIDTH = 20;
-    private final static int DEFAULT_STROKE_COLOR = 0xffff00ff;
-    private Paint paint;
-    private final static float DEFAULT_TEXT_STROKE_WIDTH = 1;
     private final static float DEFAULT_TEXT_SIZE = 60;
+    private Paint paint;
     private Paint textPaint;
 
     private double width = -1;
@@ -73,12 +76,11 @@ public class ShapeManager {
 
         paint = new Paint();
         paint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
-        paint.setColor(DEFAULT_STROKE_COLOR);
+        paint.setColor(DEFAULT_COLOR);
         paint.setStyle(Paint.Style.STROKE);
 
         textPaint = new Paint();
-        textPaint.setStrokeWidth(DEFAULT_TEXT_STROKE_WIDTH);
-        textPaint.setColor(DEFAULT_STROKE_COLOR);
+        textPaint.setColor(DEFAULT_COLOR);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(DEFAULT_TEXT_SIZE);
 
@@ -226,9 +228,55 @@ public class ShapeManager {
         // 履歴は削除しない
     }
 
-    public void drawAll(Canvas canvas) {
+    /**
+     * 作成した図形を描画する
+     * @param canvas 描画先
+     */
+    public void drawShapes(Canvas canvas) {
         for (ShapeBase shape : shapeList)
             shape.draw(canvas);
+    }
+
+    /**
+     * 一時的な色で図形を描画する
+     * @param canvas 描画先
+     * @param shape 描画する図形
+     * @param tempColor 一時的な色
+     */
+    private void drawShapeTempColor(Canvas canvas, ShapeBase shape, @ColorInt int tempColor) {
+        @ColorInt final int color = shape.getPaint().getColor();
+        shape.getPaint().setColor(tempColor);
+        shape.draw(canvas);
+        shape.getPaint().setColor(color);
+    }
+
+    /**
+     * 最新の図形を強調する
+     * （最新の図形以外は薄く表示）
+     * @param canvas 描画先
+     */
+    public void drawShapesLastHighlight(Canvas canvas) {
+        if (shapeList.isEmpty())
+            return;
+        final ShapeBase last = shapeList.getLast();
+        drawShapeTempColor(canvas, last, HIGHLIGHT_COLOR);
+
+        final int lastNum = shapeList.size() - 1;  // 最後の要素を除く
+        if (lastNum <= 0)
+            return;
+        final List<ShapeBase> otherList = shapeList.subList(0, lastNum);
+        for (ShapeBase shape : otherList)
+            drawShapeTempColor(canvas, shape, NO_HIGHLIGHT_COLOR);
+    }
+
+    /**
+     * undoした図形を透過値を変更して描画する
+     * @param canvas 描画先
+     */
+    public void drawUndo(Canvas canvas) {
+        // 各図形の透過値を変更して描画後元に戻す
+        for (ShapeBase shape : undoList)
+            drawShapeTempColor(canvas, shape, UNDO_COLOR);
     }
 
     public boolean undo() {

@@ -48,6 +48,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class DrawingFragment extends Fragment {
     private View view;
+    private DrawingView drawingView;
     private ShapeManager shapeManager;
     /**
      * 操作モードのリスト
@@ -127,7 +128,7 @@ public class DrawingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final DrawingView drawingView = view.findViewById(R.id.DrawingView);
+        drawingView = view.findViewById(R.id.DrawingView);
 
         int shapeTypePosition = 0;  // 図形選択位置
 
@@ -254,7 +255,11 @@ public class DrawingFragment extends Fragment {
                 buttonUndo.setEnabled(shapeManager.canUndo());
                 buttonRedo.setEnabled(shapeManager.canRedo());
 
-                shapeManager.drawAll(canvas);
+                //shapeManager.drawUndo(canvas);  // TODO ややこしいのでとりあえず無効
+                if (state == State.TRANSFER)
+                    shapeManager.drawShapesLastHighlight(canvas);
+                else
+                    shapeManager.drawShapes(canvas);
             }
         });
     }
@@ -317,6 +322,8 @@ public class DrawingFragment extends Fragment {
             return;
 
         spinner.setSelection(stateIndex);
+
+        drawingView.invalidate();
     }
 
     @Override
@@ -354,7 +361,6 @@ public class DrawingFragment extends Fragment {
                 break;
             case REQUEST_CODE_SET_STRING:
                 shapeManager.setText(data.getStringExtra(Intent.EXTRA_TEXT));
-                final DrawingView drawingView = view.findViewById(R.id.DrawingView);
                 drawingView.invalidate();
                 break;
         }
@@ -526,7 +532,6 @@ public class DrawingFragment extends Fragment {
         while (shapeManager.canUndo())
             shapeManager.undo();
 
-        final DrawingView drawingView = view.findViewById(R.id.DrawingView);
         drawingView.invalidate();
     }
 
