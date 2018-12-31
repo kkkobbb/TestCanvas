@@ -11,14 +11,16 @@ import java.io.Serializable;
 /**
  * 図形情報を表す基底クラス
  * <ol>
- * <li> (float, float, Paint)のコンストラクタを作成すること </li>
- * <li> シリアライズ化可能であること </li>
- * <li> Paintを保存する必要があるため、シリアライズ化する場合、
- *      派生クラスでもShapeBase型として扱うこと　(writeObject, readObject呼び出しのため)
- *      (privateだからだが、実際にShapeBase型で扱わないといけないかは未確認)</li>
+ *     派生クラス実装時の注意点
+ *     <li> (float, float, Paint)のコンストラクタを作成すること </li>
+ *     <li> シリアライズ化可能であること </li>
  * </ol>
  */
 abstract class ShapeBase implements Serializable {
+    // serialVersionUID: 以下の理由から定義しない (デフォルトを使用する)
+    //   * 派生クラスで定義するのが面倒
+    //   * シリアライズ化する変数を変更することがほぼない
+    //   * 一時保存用なので読み込み失敗しても問題ない
     private transient Paint paint;  // writeObject() readObject()でシリアライズ対応する
 
     ShapeBase(Paint paint) {

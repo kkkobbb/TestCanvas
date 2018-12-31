@@ -136,7 +136,7 @@ class ShapeArc extends ShapeBase {
         x2 = (float)(cx + r);
         y2 = (float)(cy + r);
 
-        // startAngle: x軸と 円Aの中心と(x, y)を結ぶ直線 がなす角の角度
+        // startAngle: 円Aの中心から(x, y)に伸びる直線のx軸に対する角度
         if (r == 0)
             return;
         double rad = Math.acos((x - cx) / r);
