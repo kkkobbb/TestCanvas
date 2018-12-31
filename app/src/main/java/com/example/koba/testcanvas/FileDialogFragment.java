@@ -14,9 +14,11 @@ import java.util.Objects;
 
 /**
  * ファイル関係確認用ダイアログ
+ * <div>
+ *     呼び出し側のFragmentにintentを投げることで結果を通知している <br>
+ *     呼び出し側はonActivityResult()を実装して受け取ること
+ * </div>
  */
-// 呼び出し側のFragmentにintentを投げることで結果を通知している
-// 呼び出し側はonActivityResult()を実装して受け取ること
 public class FileDialogFragment extends DialogFragment {
     private static final String KEY_SAVE_PATH = "savePath";
     private static final String KEY_TITLE = "title";

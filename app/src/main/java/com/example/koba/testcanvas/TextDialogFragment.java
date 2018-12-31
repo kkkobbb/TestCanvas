@@ -19,6 +19,10 @@ import java.util.Objects;
 
 /**
  * テキスト取得用ダイアログ
+ * <div>
+ *     呼び出し側のFragmentにintentを投げることで結果を通知している <br>
+ *     呼び出し側はonActivityResult()を実装して受け取ること
+ * </div>
  */
 public class TextDialogFragment extends DialogFragment {
     private static final String KEY_BR = "br";

@@ -3,6 +3,9 @@ package com.example.koba.testcanvas;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * 設定値取得用
+ */
 class SettingManager {
     static final String SHARED_PREFERENCES_NAME = "settings";
 

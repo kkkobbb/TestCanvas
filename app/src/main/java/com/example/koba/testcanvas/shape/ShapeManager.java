@@ -27,6 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class ShapeManager {
     private List<ShapeCreator> shapeCreatorList;
     private int selectedShape;
+
     @ColorInt private final static int DEFAULT_COLOR = 0xffff00ff;
     @ColorInt private final static int UNDO_COLOR = 0x20000000;
     @ColorInt private final static int HIGHLIGHT_COLOR = DEFAULT_COLOR;
@@ -52,7 +53,9 @@ public class ShapeManager {
     private static final String BUNDLE_KEY_UNDOLIST = "ShapeManagerUndoList";
     private static final String BUNDLE_KEY_DRAWING = "ShapeManagerDrawing";
 
-    // 文字列設定用イベントリスナー
+    /**
+     * 文字列設定用イベントリスナー
+     */
     private OnSetTextListener onSetTextListener;
 
     public ShapeManager() {
@@ -241,7 +244,7 @@ public class ShapeManager {
     }
 
     /**
-     * 一時的な色で図形を描画する
+     * 一時的に色を変更して図形を描画し、もとに戻す
      * @param canvas 描画先
      * @param shape 描画する図形
      * @param tempColor 一時的な色
@@ -273,11 +276,10 @@ public class ShapeManager {
     }
 
     /**
-     * undoした図形を透過値を変更して描画する
+     * undoした図形を色を変更して描画する
      * @param canvas 描画先
      */
     public void drawUndo(Canvas canvas) {
-        // 各図形の透過値を変更して描画後元に戻す
         for (ShapeBase shape : undoList)
             drawShapeTempColor(canvas, shape, UNDO_COLOR);
     }

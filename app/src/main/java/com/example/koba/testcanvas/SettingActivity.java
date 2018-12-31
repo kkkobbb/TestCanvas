@@ -9,6 +9,9 @@ import android.view.MenuItem;
 
 import java.util.Objects;
 
+/**
+ * 設定画面
+ */
 public class SettingActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

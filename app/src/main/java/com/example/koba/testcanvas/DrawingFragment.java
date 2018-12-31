@@ -182,6 +182,7 @@ public class DrawingFragment extends Fragment {
             }
         });
 
+        // 操作モード選択用スピナー
         final List<String> stateNameList = new ArrayList<>();
         for (State st : stateList)
             stateNameList.add(getResources().getString(st.getId()));
@@ -204,6 +205,7 @@ public class DrawingFragment extends Fragment {
         });
         setState(state);
 
+        // 図形選択用スピナー
         final List<Integer> shapeIdList = shapeManager.getShapeIdList();
         final List<String> shapeNameList = new ArrayList<>();
         for (int id : shapeIdList)
@@ -349,6 +351,8 @@ public class DrawingFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
+        // TODO 終了時のみ（戻るボタン押下時のみ？）保存するようにする？
+        // 画面遷移等、(onSaveInstanceState()が実行されるため)不要な時でもファイルに保存している
         saveInnerData();
     }
 
@@ -396,6 +400,11 @@ public class DrawingFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * 保存確認ダイアログ結果処理
+     * @param resultCode 結果
+     * @param data 保存先パス
+     */
     private void resultSaveDialog(int resultCode, Intent data) {
         switch (resultCode) {
             case Activity.RESULT_OK:
@@ -409,6 +418,11 @@ public class DrawingFragment extends Fragment {
         }
     }
 
+    /**
+     * 上書き確認ダイアログ結果処理
+     * @param resultCode 結果
+     * @param data 保存先パス
+     */
     private void resultRewriteDialog(int resultCode, Intent data) {
         switch (resultCode) {
             case Activity.RESULT_OK:
@@ -430,6 +444,9 @@ public class DrawingFragment extends Fragment {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * 現在の絵を保存する （保存確認ダイアログあり）
+     */
     private void saveDialog() {
         if (!hasPermissionSTORAGE()) {
             requestPermissionSTORAGE();
