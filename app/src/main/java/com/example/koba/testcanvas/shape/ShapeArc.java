@@ -78,13 +78,13 @@ class ShapeArc extends ShapeBase {
     @Override
     protected float getX() {
         // 円の中心を返す
-        return x1 + Math.abs(x1 - x2) / 2;
+        return (x1 + x2) / 2;
     }
 
     @Override
     protected float getY() {
         // 円の中心を返す
-        return y1 + Math.abs(y1 - y2) / 2;
+        return (y1 + y2) / 2;
     }
 
     @Override
