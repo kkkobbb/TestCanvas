@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/setting_start_action">
+        <SwitchPreference
+            android:title="@string/setting_st_load"
+            android:key="@string/setting_key_st_load"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_shape_appearance">
         <SwitchPreference
             android:title="@string/setting_sa_transfer"

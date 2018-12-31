@@ -28,6 +28,9 @@
     <string name="setting_key_sa_transfer">appearance_transfer</string>
     <string name="setting_sa_undo">「戻る」した図形も表示する</string>
     <string name="setting_key_sa_undo">appearance_undo</string>
+    <string name="setting_start_action">起動時の動作</string>
+    <string name="setting_st_load">起動時に前回の状態を復元する</string>
+    <string name="setting_key_st_load">start_action_load</string>
 
     <string name="error_string">error</string>
     <string-array name="error_shape_types">

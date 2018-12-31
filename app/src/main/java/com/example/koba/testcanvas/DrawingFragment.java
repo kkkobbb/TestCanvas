@@ -32,10 +32,15 @@ import android.widget.Toast;
 
 import com.example.koba.testcanvas.shape.ShapeManager;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +67,11 @@ public class DrawingFragment extends Fragment {
     /**
      * ファイル名の共通部分
      */
-    private static final String saveBaseName = "canvas";
+    private static final String SAVE_BASE_NAME = "canvas";
+    /**
+     * 内部データ保存用ファイル名
+     */
+    private static final String INNER_SAVE_BASE_NAME = "innerdata.dat";
     /**
      * 現在の操作モード
      */
@@ -115,6 +124,11 @@ public class DrawingFragment extends Fragment {
                     df.show(fm, "textDialog");
             }
         });
+
+        // 起動時、設定されている場合、内部データを読み込む
+        final Context context = Objects.requireNonNull(getContext());
+        if (savedInstanceState == null && SettingManager.getStartActionLoad(context))
+            loadInnerData();
 
         //final String outputDir = Environment.getExternalStorageDirectory().getPath();
         final String outputDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
@@ -332,6 +346,13 @@ public class DrawingFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+
+        saveInnerData();
+    }
+
+    @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -457,7 +478,7 @@ public class DrawingFragment extends Fragment {
      */
     private File getSavePath() {
         // ファイル名の重複のチェックはしていない
-        final StringBuilder filename = new StringBuilder(saveBaseName);
+        final StringBuilder filename = new StringBuilder(SAVE_BASE_NAME);
         final Calendar cal = Calendar.getInstance();
         final SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault());
         filename.append("_").append(f.format(cal.getTime())).append(".svg");
@@ -472,8 +493,8 @@ public class DrawingFragment extends Fragment {
         boolean wrote = false;
         try (final FileOutputStream stream = new FileOutputStream(outputPath, false);
              final OutputStreamWriter ow = new OutputStreamWriter(stream, "UTF-8");
-             final BufferedWriter bw = new BufferedWriter(ow)) {
-            wrote = shapeManager.writeTo(bw);
+             final BufferedWriter writer = new BufferedWriter(ow)) {
+            wrote = shapeManager.writeTo(writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -482,6 +503,46 @@ public class DrawingFragment extends Fragment {
             show(String.format("保存しました %s", outputPath.getName()));
         else
             show("ファイル書き込みに失敗しました");
+    }
+
+    /**
+     * 内部データを内部領域に保存する
+     */
+    private void saveInnerData() {
+        final File innerDataFile = getInnerDataFile();
+        try (final FileOutputStream fs = new FileOutputStream(innerDataFile, false);
+             final BufferedOutputStream buffer = new BufferedOutputStream(fs);
+             final ObjectOutputStream stream = new ObjectOutputStream(buffer)) {
+            shapeManager.saveInnerData(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 内部データを内部領域から取得する
+     */
+    private void loadInnerData() {
+        final File innerDataFile = getInnerDataFile();
+        if (!innerDataFile.exists())
+            return;
+        try (final FileInputStream fs = new FileInputStream(innerDataFile);
+             final BufferedInputStream buffer = new BufferedInputStream(fs);
+             final ObjectInputStream stream = new ObjectInputStream(buffer)) {
+            shapeManager.restoreInnerData(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @return 内部データ保存用ファイルパスを返す
+     */
+    @NonNull
+    private File getInnerDataFile() {
+        // 内部領域のキャッシュ領域を利用する
+        final Context context = Objects.requireNonNull(getContext());
+        return new File(context.getCacheDir(), INNER_SAVE_BASE_NAME);
     }
 
     /**

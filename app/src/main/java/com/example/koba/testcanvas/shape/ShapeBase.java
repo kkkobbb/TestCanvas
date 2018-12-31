@@ -3,15 +3,22 @@ package com.example.koba.testcanvas.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * 図形情報を表す基底クラス <br>
- * 1. (float, float, Paint)のコンストラクタを作成すること <br>
- * 2. シリアライズ化可能であること
+ * 図形情報を表す基底クラス
+ * <ol>
+ * <li> (float, float, Paint)のコンストラクタを作成すること </li>
+ * <li> シリアライズ化可能であること </li>
+ * <li> Paintを保存する場合、派生クラスでもShapeBase型として扱うこと
+ *      (writeObject, readObject呼び出しのため) </li>
+ * </ol>
  */
 abstract class ShapeBase implements Serializable {
-    private transient Paint paint;  // TODO とりあえずPaintはシリアライズ化しない
+    private transient Paint paint;  // writeObject() readObject()でシリアライズ対応する
 
     ShapeBase(Paint paint) {
         this.paint = new Paint(paint);
@@ -94,9 +101,13 @@ abstract class ShapeBase implements Serializable {
 
     /**
      * 同じ図形を作成する
+     * <div>
+     *     戻り値は同じ見た目の図形を表していれば良く、
+     *     clone()互換である必要はない（Cloneableではない）
+     * </div>
      * @return 同じ図形のもの
      */
-    // 戻り値は同じ見た目の図形を表していれば良く、clone()互換である必要はない（Cloneableではない）
+    //
     abstract ShapeBase copyShape();
 
     /**
@@ -104,4 +115,36 @@ abstract class ShapeBase implements Serializable {
      * @param data 設定するデータ
      */
     void setData(Object data) {}
+
+    /**
+     * transient変数のシリアライズ
+     * @param stream	出力先
+     * @throws IOException 書き込み失敗
+     */
+    // private宣言である必要がある
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+
+        stream.writeFloat(paint.getStrokeWidth());
+        stream.writeFloat(paint.getTextSize());
+        stream.writeInt(paint.getColor());
+        stream.writeObject(paint.getStyle());
+    }
+
+    /**
+     * transient変数のデシリアライズ
+     * @param stream 入力元
+     * @throws IOException 読み込み失敗
+     * @throws ClassNotFoundException キャスト失敗
+     */
+    // private宣言である必要がある
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+
+        paint = new Paint();
+        paint.setStrokeWidth(stream.readFloat());
+        paint.setTextSize(stream.readFloat());
+        paint.setColor(stream.readInt());
+        paint.setStyle((Paint.Style) stream.readObject());
+    }
 }

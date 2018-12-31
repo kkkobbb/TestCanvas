@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 
 import com.example.koba.testcanvas.R;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -80,9 +83,9 @@ public class ShapeManager {
         paint.setStyle(Paint.Style.STROKE);
 
         textPaint = new Paint();
+        textPaint.setTextSize(DEFAULT_TEXT_SIZE);
         textPaint.setColor(DEFAULT_COLOR);
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(DEFAULT_TEXT_SIZE);
 
         shapeList = new LinkedList<>();
         undoList = new LinkedList<>();
@@ -335,6 +338,32 @@ public class ShapeManager {
             shape.makeSvg(svg);
 
         return svg.writeTo(writer);
+    }
+
+    /**
+     * 内部データの保存
+     * @param stream 保存先
+     * @throws IOException 保存先への書き込み失敗
+     */
+    public void saveInnerData(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(shapeList);
+        stream.writeObject(undoList);
+    }
+
+    /**
+     * 内部データの読込
+     * @param stream 保存先
+     * @throws IOException 保存先からの読み込み失敗
+     */
+    @SuppressWarnings("unchecked")  // ジェネリック型(LinkedList<>)へのキャスト (回避不可)
+    public void restoreInnerData(ObjectInputStream stream) throws IOException {
+        try {
+            shapeList = (LinkedList<ShapeBase>) stream.readObject();
+            undoList = (LinkedList<ShapeBase>) stream.readObject();
+        } catch (ClassNotFoundException e) {
+            // キャスト失敗時、何もしない
+            e.printStackTrace();
+        }
     }
 
     /**
