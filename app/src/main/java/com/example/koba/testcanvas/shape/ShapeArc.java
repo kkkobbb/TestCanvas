@@ -123,14 +123,12 @@ class ShapeArc extends ShapeBase {
         // (startX, startY) (x, y)間を直径とする円を円Aとする
 
         // r: 円Aの半径
-        endX = x;
-        endY = y;
-        final double distanceSquare = getDistance2(startX, startY, endX, endY);
+        final double distanceSquare = getDistance2(startX, startY, x, y);
         final double r = Math.sqrt(distanceSquare) / 2;
 
         // 円Aの中心の座標
-        final float cx = (startX + endX) / 2;
-        final float cy = (startY + endY) / 2;
+        final float cx = (startX + x) / 2;
+        final float cy = (startY + y) / 2;
 
         // 円Aが内接円となる長方形
         x1 = (float)(cx - r);
@@ -141,10 +139,14 @@ class ShapeArc extends ShapeBase {
         // startAngle: x軸と 円Aの中心と(x, y)を結ぶ直線 がなす角の角度
         if (r == 0)
             return;
-        double rad = Math.acos((endX - cx) / r);
-        if (cy > endY)
+        double rad = Math.acos((x - cx) / r);
+        if (cy > y)
             rad = 2 * Math.PI - rad;
         startAngle = (float)Math.toDegrees(rad);
+
+        // svg出力用に端点を保存する
+        endX = x;
+        endY = y;
     }
 
     /**
@@ -170,34 +172,34 @@ class ShapeArc extends ShapeBase {
         x2 = (float)(cx + r);
         y2 = (float)(cy + r);
 
-        // 各端点のx軸に対する角度を求める
+        // 円Aの中心から各端点に伸びる直線のx軸に対する角度を求める
         if (r == 0)
             return;
-        double radStart = Math.acos((startX - cx) / r);
+        double radP = Math.acos((startX - cx) / r);
         if (cy > startY)
-            radStart = 2 * Math.PI - radStart;
-        double radEnd = Math.acos((endX - cx) / r);
-        if (cy > endY)
-            radEnd = 2 * Math.PI - radEnd;
-        double radNow = Math.acos((x - cx) / r);
+            radP = 2 * Math.PI - radP;
+        double radQ = Math.acos((x - cx) / r);
         if (cy > y)
-            radNow = 2 * Math.PI - radNow;
+            radQ = 2 * Math.PI - radQ;
+        double radR = Math.acos((endX - cx) / r);
+        if (cy > endY)
+            radR = 2 * Math.PI - radR;
 
         // 弧を描画する角度を求める
-        if ((radStart <= radNow && radNow <= radEnd) || (radEnd <= radNow && radNow <= radStart)) {
-            startAngle = (float) Math.toDegrees(radStart);
-            sweepAngle = (float) Math.toDegrees(radEnd - radStart);
-        } else if (radEnd > radStart) {
-            startAngle = (float) Math.toDegrees(radEnd);
-            sweepAngle = (float) Math.toDegrees(2 * Math.PI - (radEnd - radStart));
+        if ((radP <= radQ && radQ <= radR) || (radR <= radQ && radQ <= radP)) {
+            startAngle = (float) Math.toDegrees(radP);
+            sweepAngle = (float) Math.toDegrees(radR - radP);
+        } else if (radR > radP) {
+            startAngle = (float) Math.toDegrees(radR);
+            sweepAngle = (float) Math.toDegrees(2 * Math.PI - (radR - radP));
         } else {
-            startAngle = (float) Math.toDegrees(radStart);
-            sweepAngle = (float) Math.toDegrees(2 * Math.PI - (radStart - radEnd));
+            startAngle = (float) Math.toDegrees(radP);
+            sweepAngle = (float) Math.toDegrees(2 * Math.PI - (radP - radR));
         }
 
         // svg用のフラグを設定する
-        final double diffPQ = getRadDiff(radStart, radNow);  // 弧PQの角度
-        final double diffPR = getRadDiff(radStart, radEnd);  // 弧PRの角度
+        final double diffPQ = getRadDiff(radP, radQ);  // 弧PQの角度
+        final double diffPR = getRadDiff(radP, radR);  // 弧PRの角度
         sweepFlag = diffPQ <= diffPR;
         largeArcFlag = (diffPR >= Math.PI) ^ !sweepFlag;
     }
