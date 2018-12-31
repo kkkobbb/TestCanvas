@@ -128,7 +128,7 @@ public class DrawingFragment extends Fragment {
         // 起動時、設定されている場合、内部データを読み込む
         final Context context = Objects.requireNonNull(getContext());
         if (savedInstanceState == null && SettingManager.getStartActionLoad(context))
-            loadInnerData();
+            restoreInnerData();
 
         //final String outputDir = Environment.getExternalStorageDirectory().getPath();
         final String outputDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
@@ -335,13 +335,12 @@ public class DrawingFragment extends Fragment {
      * @param newState 変更する状態
      */
     private void setState(State newState) {
-        final Spinner spinner = view.findViewById(R.id.spinnerState);
-        state = newState;
-
-        int stateIndex = stateList.indexOf(newState);
+        final int stateIndex = stateList.indexOf(newState);
         if (stateIndex < 0)
             return;
+        state = newState;
 
+        final Spinner spinner = view.findViewById(R.id.spinnerState);
         spinner.setSelection(stateIndex);
 
         drawingView.invalidate();
@@ -539,7 +538,7 @@ public class DrawingFragment extends Fragment {
     /**
      * 内部データを内部領域から取得する
      */
-    private void loadInnerData() {
+    private void restoreInnerData() {
         final File innerDataFile = getInnerDataFile();
         if (!innerDataFile.exists())
             return;

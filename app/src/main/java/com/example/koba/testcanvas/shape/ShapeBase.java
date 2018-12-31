@@ -13,8 +13,9 @@ import java.io.Serializable;
  * <ol>
  * <li> (float, float, Paint)のコンストラクタを作成すること </li>
  * <li> シリアライズ化可能であること </li>
- * <li> Paintを保存する場合、派生クラスでもShapeBase型として扱うこと
- *      (writeObject, readObject呼び出しのため) </li>
+ * <li> Paintを保存する必要があるため、シリアライズ化する場合、
+ *      派生クラスでもShapeBase型として扱うこと　(writeObject, readObject呼び出しのため)
+ *      (privateだからだが、実際にShapeBase型で扱わないといけないかは未確認)</li>
  * </ol>
  */
 abstract class ShapeBase implements Serializable {

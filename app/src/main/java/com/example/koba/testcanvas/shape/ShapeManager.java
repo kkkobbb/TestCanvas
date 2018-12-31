@@ -118,12 +118,21 @@ public class ShapeManager {
         drawing = savedInstanceState.getBoolean(BUNDLE_KEY_DRAWING);
     }
 
+    /**
+     * 描画する図形を選択する
+     * getShapeIdList()で返すリストのインデックスのみ受け付ける
+     * @param n 図形の番号
+     */
     public void setShape(int n) {
         if (n < 0 || shapeCreatorList.size() <= n)
             return;
         selectedShape = n;
     }
 
+    /**
+     * 描画可能な図形のID一覧を返す
+     * @return 図形のID (R.string.*)のリスト
+     */
     public List<Integer> getShapeIdList() {
         ArrayList<Integer> shapeIdList = new ArrayList<>();
         for (ShapeCreator sc : shapeCreatorList)

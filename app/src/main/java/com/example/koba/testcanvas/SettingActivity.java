@@ -18,7 +18,7 @@ public class SettingActivity extends AppCompatActivity implements PreferenceFrag
         super.onCreate(savedInstanceState);
 
         // ツールバーに戻る矢印を追加する
-        ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
+        final ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_setting);

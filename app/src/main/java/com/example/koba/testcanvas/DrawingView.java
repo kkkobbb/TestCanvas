@@ -7,6 +7,9 @@ import android.view.View;
 
 import java.util.EventListener;
 
+/**
+ * onDraw()時のイベントリスナーを追加したView
+ */
 public class DrawingView extends View {
     OnDrawListener onDrawListener;
 

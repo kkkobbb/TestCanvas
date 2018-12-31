@@ -33,7 +33,7 @@ public class TextDialogFragment extends DialogFragment {
         final TextDialogFragment frag = new TextDialogFragment();
         frag.setTargetFragment(target, requestCode);
         final Bundle args = new Bundle();
-        String br_ = System.getProperty("line.separator");  // 改行文字
+        final String br_ = System.getProperty("line.separator");  // 改行文字
         args.putString(KEY_BR, br_);
         frag.setArguments(args);
         return frag;
@@ -68,14 +68,14 @@ public class TextDialogFragment extends DialogFragment {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 // 改行があると、SVGとCanvasで扱いが違うため空白に置換する
-                String text = source.toString();
+                final String text = source.toString();
                 // 改行無しの場合、デフォルトの動作
                 if (!text.contains(br))
                     return null;
                 return text.replace(br, " ");
             }}};
         editText.setFilters(filters);
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Text");
         builder.setView(editText);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -85,7 +85,7 @@ public class TextDialogFragment extends DialogFragment {
                     return;
                 final Intent data = new Intent();
                 // 入力された文字列を投げる
-                SpannableStringBuilder ssb = (SpannableStringBuilder)editText.getText();
+                final SpannableStringBuilder ssb = (SpannableStringBuilder)editText.getText();
                 data.putExtra(Intent.EXTRA_TEXT, ssb.toString());
                 target.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
             }
