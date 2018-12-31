@@ -350,9 +350,11 @@ public class DrawingFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-        // TODO 終了時のみ（戻るボタン押下時のみ？）保存するようにする？
-        // 画面遷移等、(onSaveInstanceState()が実行されるため)不要な時でもファイルに保存している
-        saveInnerData();
+        // 終了時のみ保存する
+        // 内部状態の保存自体は設定に関係なく行う
+        final Activity activity = Objects.requireNonNull(getActivity());
+        if (activity.isFinishing())
+            saveInnerData();
     }
 
     @Override
