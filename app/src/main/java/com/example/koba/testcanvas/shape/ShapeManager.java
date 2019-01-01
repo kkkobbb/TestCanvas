@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import com.example.koba.testcanvas.R;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Writer;
@@ -349,6 +350,95 @@ public class ShapeManager {
             shape.makeSvg(svg);
 
         return svg.writeTo(writer);
+    }
+
+    public boolean read(InputStream stream) {
+        ISvgReader svg = new TinySvgReader();
+        // 各図形のイベント設定
+        svg.setOnPathArcListener(new ISvgReader.OnPathArcListener() {
+            @Override
+            public void onPathArc(ISvgReader svg, double x1, double y1, double x2, double y2, double rx, double ry, double xAxisRotation, boolean largeArcFlag, boolean sweepFlag) {
+                // TODO ShapeArcに専用のコンストラクタを作る？
+            }
+        });
+        svg.setOnCircleListener(new ISvgReader.OnCircleListener() {
+            @Override
+            public void onCircle(ISvgReader svg, double cx, double cy, double r) {
+                final ShapeCircle shape = new ShapeCircle((float)cx, (float)cy, (float)r, readPaint(svg));
+                shapeList.addLast(shape);
+            }
+        });
+        svg.setOnEllipseListener(new ISvgReader.OnEllipseListener() {
+            @Override
+            public void onEllipse(ISvgReader svg, double cx, double cy, double rx, double ry) {
+                final ShapeEllipse shape = new ShapeEllipse((float)cx, (float)cy,
+                        (float)rx, (float)ry, readPaint(svg));
+                shapeList.addLast(shape);
+            }
+        });
+        svg.setOnLineListener(new ISvgReader.OnLineListener() {
+            @Override
+            public void onLine(ISvgReader svg, double x1, double y1, double x2, double y2) {
+                final ShapeLine shape = new ShapeLine((float)x1, (float)y1, (float)x2, (float)y2,
+                        readPaint(svg));
+                shapeList.addLast(shape);
+            }
+        });
+        svg.setOnPolygonListener(new ISvgReader.OnPolygonListener() {
+            @Override
+            public void onPolygon(ISvgReader svg, double x, double y, List<Double> pointList) {
+                final ArrayList<Float> list = new ArrayList<>();
+                for (double p : pointList)
+                    list.add((float)p);
+                final ShapePolygon shape = new ShapePolygon((float)x, (float)y, list, readPaint(svg));
+                shapeList.addLast(shape);
+            }
+        });
+        svg.setOnPolylineListener(new ISvgReader.OnPolylineListener() {
+            @Override
+            public void onPolyline(ISvgReader svg, double x, double y, List<Double> pointList) {
+                final ArrayList<Float> list = new ArrayList<>();
+                for (double p : pointList)
+                    list.add((float)p);
+                final ShapePolyline shape = new ShapePolyline((float)x, (float)y, list, readPaint(svg));
+                shapeList.addLast(shape);
+            }
+        });
+        svg.setOnRectListener(new ISvgReader.OnRectListener() {
+            @Override
+            public void onRect(ISvgReader svg, double x, double y, double width, double height) {
+                float x1 = (float)x;
+                float y1 = (float)y;
+                float x2 = (float)(x + width);
+                float y2 = (float)(y + height);
+                final ShapeRect shape = new ShapeRect(x1, y1, x2, y2, readPaint(svg));
+                shapeList.addLast(shape);
+            }
+        });
+        svg.setOnTextListener(new ISvgReader.OnTextListener() {
+            @Override
+            public void onText(ISvgReader svg, double x, double y, String str) {
+                final ShapeText shape = new ShapeText((float)x, (float)y, str, readPaint(svg));
+                shapeList.addLast(shape);
+            }
+        });
+
+        return svg.read(stream);
+    }
+
+    private Paint readPaint(ISvgReader svg) {
+        final Paint paint = new Paint();
+        paint.setStrokeWidth(svg.getStrokeWidth());
+        paint.setTextSize(svg.getFontSize());
+        final String fill = svg.getFill();
+        if (fill.equals("none")) {
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(svg.getStrokeColor());
+        } else if (fill.startsWith("#")) {
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(svg.getFillColor());
+        }
+        return paint;
     }
 
     /**

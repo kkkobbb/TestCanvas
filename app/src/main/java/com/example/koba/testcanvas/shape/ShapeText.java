@@ -24,7 +24,7 @@ class ShapeText extends ShapeBase {
      * @param str 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    private ShapeText(float x, float y, String str, Paint paint) {
+    ShapeText(float x, float y, String str, Paint paint) {
         super(paint);
 
         this.x = x;

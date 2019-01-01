@@ -38,6 +38,16 @@ interface ISvgReader {
     float getFontSize();
 
     /**
+     * @return fill属性
+     */
+    String getFill();
+
+    /**
+     * @return 塗りつぶしの色
+     */
+    int getFillColor();
+
+    /**
      * 円読み込み時のイベントを設定する
      * @param listener 円読み込み時のイベント
      */

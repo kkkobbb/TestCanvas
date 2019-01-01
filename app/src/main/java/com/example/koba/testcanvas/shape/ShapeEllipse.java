@@ -26,7 +26,7 @@ class ShapeEllipse extends ShapeBase {
      * @param ry 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    private ShapeEllipse(float cx, float cy, float rx, float ry, Paint paint) {
+    ShapeEllipse(float cx, float cy, float rx, float ry, Paint paint) {
         super(new Paint(paint));
 
         this.cx = cx;

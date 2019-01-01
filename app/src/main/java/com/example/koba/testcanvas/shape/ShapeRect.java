@@ -26,7 +26,7 @@ class ShapeRect extends ShapeBase {
      * @param y2 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    private ShapeRect(float x1, float y1, float x2, float y2, Paint paint) {
+    ShapeRect(float x1, float y1, float x2, float y2, Paint paint) {
         super(new Paint(paint));
 
         this.x1 = x1;

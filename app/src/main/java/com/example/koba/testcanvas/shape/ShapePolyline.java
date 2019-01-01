@@ -29,7 +29,7 @@ class ShapePolyline extends ShapeBase {
      * @param pointList 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    private ShapePolyline(float x, float y, ArrayList<Float> pointList, Paint paint) {
+    ShapePolyline(float x, float y, ArrayList<Float> pointList, Paint paint) {
         super(new Paint(paint));
 
         this.x = x;

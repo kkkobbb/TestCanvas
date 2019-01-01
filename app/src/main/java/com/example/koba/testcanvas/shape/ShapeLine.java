@@ -26,7 +26,7 @@ class ShapeLine extends ShapeBase {
      * @param y2 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    private ShapeLine(float x1, float y1, float x2, float y2, Paint paint) {
+    ShapeLine(float x1, float y1, float x2, float y2, Paint paint) {
         super(new Paint(paint));
 
         this.x1 = x1;

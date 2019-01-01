@@ -29,7 +29,7 @@ class ShapePolygon extends ShapeBase {
      * @param pointList 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    private ShapePolygon(float x, float y, ArrayList<Float> pointList, Paint paint) {
+    ShapePolygon(float x, float y, ArrayList<Float> pointList, Paint paint) {
         super(new Paint(paint));
 
         this.x = x;

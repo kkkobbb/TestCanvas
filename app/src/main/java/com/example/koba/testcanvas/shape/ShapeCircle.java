@@ -23,7 +23,7 @@ class ShapeCircle extends ShapeBase {
      * @param r 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    private ShapeCircle(float x, float y, float r, Paint paint) {
+    ShapeCircle(float x, float y, float r, Paint paint) {
         super(new Paint(paint));
 
         this.x = x;

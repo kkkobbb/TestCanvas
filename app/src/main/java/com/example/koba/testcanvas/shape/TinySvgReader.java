@@ -43,6 +43,8 @@ class TinySvgReader implements ISvgReader {
     private int strokeColor = 0xff000000;
     private float strokeWidth = 1;
     private float fontSize = 1;
+    private String fill = "";
+    private int fillColor = 0xff000000;
 
     @Override
     public boolean read(InputStream stream) {
@@ -142,6 +144,7 @@ class TinySvgReader implements ISvgReader {
         if (onLineListener == null)
             return;
         readAttr(elem);
+        fill = "none"; // 塗りつぶしなし扱いをする
         final double x1 = Double.parseDouble(elem.getAttribute("x1"));
         final double y1 = Double.parseDouble(elem.getAttribute("y1"));
         final double x2 = Double.parseDouble(elem.getAttribute("x2"));
@@ -211,13 +214,22 @@ class TinySvgReader implements ISvgReader {
         }
         if (strokeColorOnly > 0xffffff)
             strokeColorOnly = 0xffffff;
-        strokeColor = alpha << 24 | strokeColorOnly;
+        strokeColor = (alpha << 24) | strokeColorOnly;
         // 線の幅の取得
         if (elem.hasAttribute("stroke-width"))
             strokeWidth = (float) Double.parseDouble(elem.getAttribute("stroke-width"));
         // 文字のサイズの取得
         if (elem.hasAttribute("font-size"))
             fontSize = (float) Double.parseDouble(elem.getAttribute("font-size"));
+        // fill属性
+        if (elem.hasAttribute("fill"))
+            fill = elem.getAttribute("fill");
+        int fillColorOnly = 0;
+        if (fill.startsWith("#"))
+            fillColorOnly = Integer.parseInt(fill.substring(1), 16);
+        if (fillColorOnly > 0xffffff)
+            fillColorOnly = 0xffffff;
+        fillColor = (alpha << 24) | fillColorOnly;
     }
 
     @Override
@@ -243,6 +255,16 @@ class TinySvgReader implements ISvgReader {
     @Override
     public float getFontSize() {
         return fontSize;
+    }
+
+    @Override
+    public String getFill() {
+        return fill;
+    }
+
+    @Override
+    public int getFillColor() {
+        return fillColor;
     }
 
     @Override
