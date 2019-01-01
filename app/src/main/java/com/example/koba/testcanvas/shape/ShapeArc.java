@@ -75,6 +75,25 @@ class ShapeArc extends ShapeBase {
         state = State.CHANGE_CIRCLE;
     }
 
+    /**
+     * SVGの属性用
+     * @param x1 startX
+     * @param y1 startY
+     * @param x2 endX
+     * @param y2 endY
+     * @param rx メンバ変数に対応なし
+     * @param ry メンバ変数に対応なし
+     * @param xAxisRotation 値に関係なく0とみなす
+     * @param largeArcFlag 同名メンバ変数
+     * @param sweepFlag 同名メンバ変数
+     * @param paint 同名メンバ変数
+     */
+    ShapeArc( double x1, double y1, double x2, double y2, double rx, double ry,
+              double xAxisRotation, boolean largeArcFlag, boolean sweepFlag, Paint paint) {
+        super(paint);
+        // TODO 未実装  このコンストラクタが呼び出されると、画面描画時、SVG出力時に落ちる
+    }
+
     @Override
     protected float getX() {
         // 円の中心を返す

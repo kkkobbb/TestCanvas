@@ -357,14 +357,19 @@ public class ShapeManager {
         // 各図形のイベント設定
         svg.setOnPathArcListener(new ISvgReader.OnPathArcListener() {
             @Override
-            public void onPathArc(ISvgReader svg, double x1, double y1, double x2, double y2, double rx, double ry, double xAxisRotation, boolean largeArcFlag, boolean sweepFlag) {
-                // TODO ShapeArcに専用のコンストラクタを作る？
+            public void onPathArc(ISvgReader svg, double x1, double y1,
+                                  double x2, double y2, double rx, double ry,
+                                  double xAxisRotation, boolean largeArcFlag, boolean sweepFlag) {
+                final ShapeArc shape = new ShapeArc(x1, y1, x2, y2, rx, ry,
+                        xAxisRotation, largeArcFlag, sweepFlag, readPaint(svg));
+                shapeList.addLast(shape);
             }
         });
         svg.setOnCircleListener(new ISvgReader.OnCircleListener() {
             @Override
             public void onCircle(ISvgReader svg, double cx, double cy, double r) {
-                final ShapeCircle shape = new ShapeCircle((float)cx, (float)cy, (float)r, readPaint(svg));
+                final ShapeCircle shape = new ShapeCircle((float)cx, (float)cy, (float)r,
+                        readPaint(svg));
                 shapeList.addLast(shape);
             }
         });
@@ -390,7 +395,8 @@ public class ShapeManager {
                 final ArrayList<Float> list = new ArrayList<>();
                 for (double p : pointList)
                     list.add((float)p);
-                final ShapePolygon shape = new ShapePolygon((float)x, (float)y, list, readPaint(svg));
+                final ShapePolygon shape = new ShapePolygon((float)x, (float)y, list,
+                        readPaint(svg));
                 shapeList.addLast(shape);
             }
         });
@@ -400,7 +406,8 @@ public class ShapeManager {
                 final ArrayList<Float> list = new ArrayList<>();
                 for (double p : pointList)
                     list.add((float)p);
-                final ShapePolyline shape = new ShapePolyline((float)x, (float)y, list, readPaint(svg));
+                final ShapePolyline shape = new ShapePolyline((float)x, (float)y, list,
+                        readPaint(svg));
                 shapeList.addLast(shape);
             }
         });
