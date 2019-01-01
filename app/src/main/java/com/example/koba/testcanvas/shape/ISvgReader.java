@@ -13,6 +13,12 @@ interface ISvgReader {
     boolean read(InputStream stream);
 
     /**
+     * SVG解析
+     * @return 成否
+     */
+    boolean parse();
+
+    /**
      * @return 画像全体のサイズ 幅
      */
     double getSvgSizeWidth();

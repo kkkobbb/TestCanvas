@@ -40,6 +40,8 @@ class TinySvgReader implements ISvgReader {
     private OnRectListener onRectListener = null;
     private OnTextListener onTextListener = null;
 
+    private Element svg = null;
+
     private double width = 0;
     private double height = 0;
     private int strokeColor = 0xff000000;
@@ -61,7 +63,7 @@ class TinySvgReader implements ISvgReader {
         }
 
         // ルートノード取得
-        final Element svg = document.getDocumentElement();
+        svg = document.getDocumentElement();
         if (!svg.getTagName().equals(TAG_SVG))
             return false;
 
@@ -70,6 +72,13 @@ class TinySvgReader implements ISvgReader {
             width = Double.parseDouble(svg.getAttribute(ATTR_WIDTH));
         if (svg.hasAttribute(ATTR_HEIGHT))
             height = Double.parseDouble(svg.getAttribute(ATTR_HEIGHT));
+
+        return true;
+    }
+
+    public boolean parse() {
+        if (svg == null)
+            return false;
 
         // 子ノード取得
         final NodeList nodeList = svg.getChildNodes();
@@ -158,7 +167,8 @@ class TinySvgReader implements ISvgReader {
         if (onPathArcListener == null)
             return;
         readAttr(elem);
-        // TODO
+
+        // TODO 未実装
     }
 
     private void readPolygon(Element elem) {
@@ -259,8 +269,8 @@ class TinySvgReader implements ISvgReader {
      */
     private List<Double> getPointList(String points) {
         // まず空白で分割されたxyの配列を作成
-        String[] pointsStrArray = points.split(" ");
-        List<Double> pointList = new LinkedList<>();
+        final String[] pointsStrArray = points.split(" ");
+        final List<Double> pointList = new LinkedList<>();
         for (String xy : pointsStrArray) {
             // コンマで区切られたxyを分割してリストに追加
             final String[] xyArray = xy.split(",");

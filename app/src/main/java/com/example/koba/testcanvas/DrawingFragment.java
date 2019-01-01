@@ -640,7 +640,7 @@ public class DrawingFragment extends Fragment {
      * 設定画面の表示
      */
     private void setting() {
-        Intent intent = new Intent(getActivity(), SettingActivity.class);
+        final Intent intent = new Intent(getActivity(), SettingActivity.class);
         startActivity(intent);
     }
 
@@ -648,7 +648,7 @@ public class DrawingFragment extends Fragment {
      * 読み込むSVGファイルの選択
      */
     private void selectLoadFile() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/svg+xml");
         //intent.setType("*/*");
         startActivityForResult(intent, REQUEST_CODE_SELECT_LOAD_FILE);
@@ -659,7 +659,7 @@ public class DrawingFragment extends Fragment {
      */
     private void loadSvg(Uri uri) {
         boolean read = false;
-        Activity activity = Objects.requireNonNull(getActivity());
+        final Activity activity = Objects.requireNonNull(getActivity());
         try (final InputStream is = activity.getContentResolver().openInputStream(uri);
              final BufferedInputStream stream = new BufferedInputStream(is)) {
             read = shapeManager.read(stream);

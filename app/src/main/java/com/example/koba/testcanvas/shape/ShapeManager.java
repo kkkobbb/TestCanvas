@@ -354,6 +354,9 @@ public class ShapeManager {
 
     public boolean read(InputStream stream) {
         ISvgReader svg = new TinySvgReader();
+        if (!svg.read(stream))
+            return false;
+
         // 各図形のイベント設定
         svg.setOnPathArcListener(new ISvgReader.OnPathArcListener() {
             @Override
@@ -430,7 +433,7 @@ public class ShapeManager {
             }
         });
 
-        return svg.read(stream);
+        return svg.parse();
     }
 
     private Paint readPaint(ISvgReader svg) {
