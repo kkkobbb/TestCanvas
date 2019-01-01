@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
@@ -92,6 +94,10 @@ public class DrawingFragment extends Fragment {
      * Intent受け取り用 ダイアログから文字列取得
      */
     private static final int REQUEST_CODE_SET_STRING = 2;
+    /**
+     * Intent受け取り用 ファイルパス取得
+     */
+    private static final int REQUEST_CODE_SELECT_LOAD_FILE = 3;
 
     private static final String BUNDLE_KEY_STATE = "DrawingFragmentState";
     private static final String BUNDLE_KEY_SHAPETYPE = "DrawingFragmentShapeType";
@@ -379,6 +385,8 @@ public class DrawingFragment extends Fragment {
             case R.id.menu_setting:
                 setting();
                 return true;
+            case R.id.menu_load:
+                selectLoadFile();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -397,6 +405,9 @@ public class DrawingFragment extends Fragment {
                 shapeManager.setText(data.getStringExtra(Intent.EXTRA_TEXT));
                 drawingView.invalidate();
                 break;
+            case REQUEST_CODE_SELECT_LOAD_FILE:
+                final Uri uri = data.getData();
+                loadSvg(uri);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -628,6 +639,36 @@ public class DrawingFragment extends Fragment {
     private void setting() {
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * 読み込むSVGファイルの選択
+     */
+    private void selectLoadFile() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setType("*/*");
+        startActivityForResult(intent, REQUEST_CODE_SELECT_LOAD_FILE);
+    }
+
+    /**
+     * SVGファイルの読み込み
+     */
+    private void loadSvg(Uri uri) {
+        boolean read = false;
+        Activity activity = Objects.requireNonNull(getActivity());
+        try (final InputStream is = activity.getContentResolver().openInputStream(uri);
+             final BufferedInputStream stream = new BufferedInputStream(is)) {
+            read = shapeManager.read(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (read) {
+            show("ファイルを読み込みました");
+            drawingView.invalidate();
+        } else {
+            show("ファイル読み込みに失敗しました");
+        }
     }
 
     private enum State {

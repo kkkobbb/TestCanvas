@@ -2,9 +2,10 @@
     <string name="app_name">TestCanvas</string>
 
     <string name="menu_save">保存</string>
+    <string name="menu_setting">設定</string>
+    <string name="menu_load">SVGファイルを読み込み</string>
     <string name="menu_copy_path">保存先パスをコピー</string>
     <string name="menu_clear">全削除</string>
-    <string name="menu_setting">設定</string>
 
     <string name="button_undo">戻る</string>
     <string name="button_redo">進む</string>
