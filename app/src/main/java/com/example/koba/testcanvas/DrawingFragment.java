@@ -648,8 +648,9 @@ public class DrawingFragment extends Fragment {
      * 読み込むSVGファイルの選択
      */
     private void selectLoadFile() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.setType("*/*");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/svg+xml");
+        //intent.setType("*/*");
         startActivityForResult(intent, REQUEST_CODE_SELECT_LOAD_FILE);
     }
 
