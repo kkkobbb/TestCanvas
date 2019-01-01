@@ -8,6 +8,8 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -163,14 +165,32 @@ class TinySvgReader implements ISvgReader {
         if (onPolygonListener == null)
             return;
         readAttr(elem);
-        // TODO
+        final String points = elem.getAttribute("points");
+        final List<Double> pointList = getPointList(points);
+        // 線が描けないpointListの場合、何もしない
+        final int pointListSize = pointList.size();
+        if (pointListSize < 2 || pointListSize % 2 != 0)
+            return;
+
+        final double x = pointList.remove(0);
+        final double y = pointList.remove(0);
+        onPolygonListener.onPolygon(this, x, y, pointList);
     }
 
     private void readPolyline(Element elem) {
         if (onPolylineListener == null)
             return;
         readAttr(elem);
-        // TODO
+        final String points = elem.getAttribute("points");
+        final List<Double> pointList = getPointList(points);
+        // 線が描けないpointListの場合、何もしない
+        final int pointListSize = pointList.size();
+        if (pointListSize < 2 || pointListSize % 2 != 0)
+            return;
+
+        final double x = pointList.remove(0);
+        final double y = pointList.remove(0);
+        onPolylineListener.onPolyline(this, x, y, pointList);
     }
 
     private void readRect(Element elem) {
@@ -230,6 +250,24 @@ class TinySvgReader implements ISvgReader {
         if (fillColorOnly > 0xffffff)
             fillColorOnly = 0xffffff;
         fillColor = (alpha << 24) | fillColorOnly;
+    }
+
+    /**
+     * 空白で区切られた(x,y)をListにして返す
+     * @param points 空白区切りの数字列
+     * @return Doubleのリスト
+     */
+    private List<Double> getPointList(String points) {
+        // まず空白で分割されたxyの配列を作成
+        String[] pointsStrArray = points.split(" ");
+        List<Double> pointList = new LinkedList<>();
+        for (String xy : pointsStrArray) {
+            // コンマで区切られたxyを分割してリストに追加
+            final String[] xyArray = xy.split(",");
+            pointList.add(Double.parseDouble(xyArray[0]));
+            pointList.add(Double.parseDouble(xyArray[1]));
+        }
+        return pointList;
     }
 
     @Override
