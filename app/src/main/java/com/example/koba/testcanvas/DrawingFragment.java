@@ -406,8 +406,11 @@ public class DrawingFragment extends Fragment {
                 drawingView.invalidate();
                 break;
             case REQUEST_CODE_SELECT_LOAD_FILE:
-                final Uri uri = data.getData();
-                loadSvg(uri);
+                if (data != null) {
+                    final Uri uri = data.getData();
+                    loadSvg(uri);
+                }
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
