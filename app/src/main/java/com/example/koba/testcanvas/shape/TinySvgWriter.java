@@ -21,7 +21,7 @@ import javax.xml.transform.stream.StreamResult;
  *
  * 基本図形の追加等
  */
-class TinySvg implements ISvgWriter {
+class TinySvgWriter implements ISvgWriter {
     private static final String NS_SVG = "http://www.w3.org/2000/svg";
     private static final String NS_XLINK = "http://www.w3.org/1999/xlink";
     private Document document;
@@ -29,7 +29,7 @@ class TinySvg implements ISvgWriter {
     private float strokeWidth = 1;
     private float fontSize = 20;
 
-    TinySvg() throws ParserConfigurationException {
+    TinySvgWriter() throws ParserConfigurationException {
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         document = documentBuilder.newDocument();

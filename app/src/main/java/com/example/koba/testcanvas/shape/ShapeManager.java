@@ -336,7 +336,7 @@ public class ShapeManager {
     public boolean writeTo(Writer writer) {
         ISvgWriter svg;
         try {
-            svg = new TinySvg();
+            svg = new TinySvgWriter();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
             return false;
