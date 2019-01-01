@@ -1,16 +1,16 @@
 package com.example.koba.testcanvas.shape;
 
-import java.io.Reader;
+import java.io.InputStream;
 import java.util.EventListener;
 import java.util.List;
 
 interface ISvgReader {
     /**
      * SVG読み込み
-     * @param reader 入力元
+     * @param stream 入力元
      * @return 成否
      */
-    boolean read(Reader reader);
+    boolean read(InputStream stream);
 
     /**
      * @return 画像全体のサイズ 幅
