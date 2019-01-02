@@ -24,12 +24,27 @@ class ShapeText extends ShapeBase {
      * @param str 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    ShapeText(float x, float y, String str, Paint paint) {
+    private ShapeText(float x, float y, String str, Paint paint) {
         super(paint);
 
         this.x = x;
         this.y = y;
         this.str = str;
+    }
+
+    /**
+     * SVGの属性用
+     * @param x 同名メンバ変数
+     * @param y 同名メンバ変数
+     * @param str 同名メンバ変数
+     * @param paint 同名メンバ変数
+     * @return 新しいインスタンス
+     */
+    static ShapeText newFromSvg(double x, double y, String str, Paint paint) {
+        if (paint == null)
+            return null;
+
+        return new ShapeText((float)x, (float)y, str, paint);
     }
 
     @Override

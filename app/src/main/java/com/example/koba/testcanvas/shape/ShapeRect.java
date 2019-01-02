@@ -26,7 +26,7 @@ class ShapeRect extends ShapeBase {
      * @param y2 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    ShapeRect(float x1, float y1, float x2, float y2, Paint paint) {
+    private ShapeRect(float x1, float y1, float x2, float y2, Paint paint) {
         super(new Paint(paint));
 
         this.x1 = x1;
@@ -35,6 +35,26 @@ class ShapeRect extends ShapeBase {
         this.y2 = y2;
     }
 
+    /**
+     * SVGの属性用
+     * @param x 右上のx座標
+     * @param y 右上のy座標
+     * @param width 幅
+     * @param height 高さ
+     * @param paint 同名メンバ変数
+     * @return 新しいインスタンス
+     */
+    static ShapeRect newFromSvg(double x, double y, double width, double height, Paint paint) {
+        if (paint == null)
+            return null;
+
+        final float x1 = (float)x;
+        final float y1 = (float)y;
+        final float x2 = (float)(x + width);
+        final float y2 = (float)(y + height);
+
+        return new ShapeRect(x1, y1, x2, y2, paint);
+    }
 
     @Override
     protected float getX() {

@@ -26,13 +26,29 @@ class ShapeLine extends ShapeBase {
      * @param y2 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    ShapeLine(float x1, float y1, float x2, float y2, Paint paint) {
+    private ShapeLine(float x1, float y1, float x2, float y2, Paint paint) {
         super(new Paint(paint));
 
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+    }
+
+    /**
+     * SVGの属性用
+     * @param x1 同名メンバ変数
+     * @param y1 同名メンバ変数
+     * @param x2 同名メンバ変数
+     * @param y2 同名メンバ変数
+     * @param paint 同名メンバ変数
+     * @return 新しいインスタンス
+     */
+    static ShapeLine newFromSvg(double x1, double y1, double x2, double y2, Paint paint) {
+        if (paint == null)
+            return null;
+
+        return new ShapeLine((float)x1, (float)y1, (float)x2, (float)y2, paint);
     }
 
     @Override

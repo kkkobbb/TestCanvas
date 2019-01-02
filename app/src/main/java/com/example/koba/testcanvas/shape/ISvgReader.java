@@ -159,24 +159,18 @@ interface ISvgReader {
         /**
          * 多角形の読み込み
          * @param svg svgデータ
-         * @param x 始点のx座標
-         * @param y 始点のy座標
-         * @param pointList 以降の点の座標 x座標, y座標, x座標 ... の繰り返し
+         * @param points 各点の座標 x座標, y座標, x座標 ... の繰り返し
          */
-        void onPolygon(ISvgReader svg, double x, double y, List<Double> pointList);
-
+        void onPolygon(ISvgReader svg, List<Double> points);
     }
 
     interface OnPolylineListener extends EventListener {
         /**
          * 連続直線の読み込み
          * @param svg svgデータ
-         * @param x 始点のx座標
-         * @param y 始点のy座標
-         * @param pointList 以降の点の座標 x座標, y座標, x座標 ... の繰り返し
+         * @param points 各点の座標 x座標, y座標, x座標 ... の繰り返し
          */
-        void onPolyline(ISvgReader svg, double x, double y, List<Double> pointList);
-
+        void onPolyline(ISvgReader svg, List<Double> points);
     }
 
     interface OnRectListener extends EventListener {
@@ -189,7 +183,6 @@ interface ISvgReader {
          * @param height 高さ
          */
         void onRect(ISvgReader svg, double x, double y, double width, double height);
-
     }
 
     interface OnTextListener extends EventListener {

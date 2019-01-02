@@ -23,12 +23,27 @@ class ShapeCircle extends ShapeBase {
      * @param r 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    ShapeCircle(float x, float y, float r, Paint paint) {
+    private ShapeCircle(float x, float y, float r, Paint paint) {
         super(new Paint(paint));
 
         this.x = x;
         this.y = y;
         this.r = r;
+    }
+
+    /**
+     * SVGの属性用
+     * @param x 同名メンバ変数
+     * @param y 同名メンバ変数
+     * @param r 同名メンバ変数
+     * @param paint 同名メンバ変数
+     * @return 新しいインスタンス
+     */
+    static ShapeCircle newFromSvg(double x, double y, double r, Paint paint) {
+        if (paint == null)
+            return null;
+
+        return  new ShapeCircle((float)x, (float)y, (float)r, paint);
     }
 
     @Override

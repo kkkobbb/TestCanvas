@@ -26,13 +26,29 @@ class ShapeEllipse extends ShapeBase {
      * @param ry 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    ShapeEllipse(float cx, float cy, float rx, float ry, Paint paint) {
+    private ShapeEllipse(float cx, float cy, float rx, float ry, Paint paint) {
         super(new Paint(paint));
 
         this.cx = cx;
         this.cy = cy;
         this.rx = rx;
         this.ry = ry;
+    }
+
+    /**
+     * SVGの属性用
+     * @param cx 同名メンバ変数
+     * @param cy 同名メンバ変数
+     * @param rx 同名メンバ変数
+     * @param ry 同名メンバ変数
+     * @param paint 同名メンバ変数
+     * @return 新しいインスタンス
+     */
+    static ShapeEllipse newFromSvg(double cx, double cy, double rx, double ry, Paint paint) {
+        if (paint == null)
+            return null;
+
+        return new ShapeEllipse((float)cx, (float)cy, (float)rx, (float)ry, paint);
     }
 
     @Override

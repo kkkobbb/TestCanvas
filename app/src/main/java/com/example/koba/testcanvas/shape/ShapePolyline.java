@@ -29,12 +29,34 @@ class ShapePolyline extends ShapeBase {
      * @param pointList 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    ShapePolyline(float x, float y, ArrayList<Float> pointList, Paint paint) {
+    private ShapePolyline(float x, float y, List<Float> pointList, Paint paint) {
         super(new Paint(paint));
 
         this.x = x;
         this.y = y;
         this.pointList = new ArrayList<>(pointList);
+    }
+
+    /**
+     * SVGの属性用
+     * @param points 座標のリスト
+     * @param paint 同名メンバ変数
+     * @return 新しいインスタンス
+     */
+    static ShapePolyline newFromSvg(List<Double> points, Paint paint) {
+        if (paint == null)
+            return null;
+        // 線が描けないpointsの場合、何もしない
+        final int pointsSize = points.size();
+        if (pointsSize < 2 || pointsSize % 2 != 0)
+            return null;
+
+        final ArrayList<Float> pointList = new ArrayList<>();
+        final float x = points.remove(0).floatValue();
+        final float y = points.remove(0).floatValue();
+        for (double p : points)
+            pointList.add((float)p);
+        return new ShapePolyline(x, y, pointList, paint);
     }
 
     @Override

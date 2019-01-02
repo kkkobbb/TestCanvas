@@ -164,6 +164,7 @@ class TinySvgReader implements ISvgReader {
     }
 
     private void readPath(Element elem) {
+        // 円弧のみ対応
         if (onPathArcListener == null)
             return;
         readAttr(elem);
@@ -175,32 +176,18 @@ class TinySvgReader implements ISvgReader {
         if (onPolygonListener == null)
             return;
         readAttr(elem);
-        final String points = elem.getAttribute("points");
-        final List<Double> pointList = getPointList(points);
-        // 線が描けないpointListの場合、何もしない
-        final int pointListSize = pointList.size();
-        if (pointListSize < 2 || pointListSize % 2 != 0)
-            return;
-
-        final double x = pointList.remove(0);
-        final double y = pointList.remove(0);
-        onPolygonListener.onPolygon(this, x, y, pointList);
+        final String pointsStr = elem.getAttribute("points");
+        final List<Double> points = getPointList(pointsStr);
+        onPolygonListener.onPolygon(this, points);
     }
 
     private void readPolyline(Element elem) {
         if (onPolylineListener == null)
             return;
         readAttr(elem);
-        final String points = elem.getAttribute("points");
-        final List<Double> pointList = getPointList(points);
-        // 線が描けないpointListの場合、何もしない
-        final int pointListSize = pointList.size();
-        if (pointListSize < 2 || pointListSize % 2 != 0)
-            return;
-
-        final double x = pointList.remove(0);
-        final double y = pointList.remove(0);
-        onPolylineListener.onPolyline(this, x, y, pointList);
+        final String pointsStr = elem.getAttribute("points");
+        final List<Double> points = getPointList(pointsStr);
+        onPolylineListener.onPolyline(this, points);
     }
 
     private void readRect(Element elem) {

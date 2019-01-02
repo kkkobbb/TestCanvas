@@ -88,10 +88,13 @@ class ShapeArc extends ShapeBase {
      * @param sweepFlag 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    ShapeArc( double x1, double y1, double x2, double y2, double rx, double ry,
+    static ShapeArc newFromSvg( double x1, double y1, double x2, double y2, double rx, double ry,
               double xAxisRotation, boolean largeArcFlag, boolean sweepFlag, Paint paint) {
-        super(paint);
+        if (paint == null)
+            return null;
+
         // TODO 未実装  このコンストラクタが呼び出されると、画面描画時、SVG出力時に落ちる
+        return null;
     }
 
     @Override

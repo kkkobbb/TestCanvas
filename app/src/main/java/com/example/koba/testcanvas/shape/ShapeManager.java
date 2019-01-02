@@ -363,73 +363,66 @@ public class ShapeManager {
             public void onPathArc(ISvgReader svg, double x1, double y1,
                                   double x2, double y2, double rx, double ry,
                                   double xAxisRotation, boolean largeArcFlag, boolean sweepFlag) {
-                final ShapeArc shape = new ShapeArc(x1, y1, x2, y2, rx, ry,
+                final ShapeArc shape = ShapeArc.newFromSvg(x1, y1, x2, y2, rx, ry,
                         xAxisRotation, largeArcFlag, sweepFlag, readPaint(svg));
-                shapeList.addLast(shape);
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
         svg.setOnCircleListener(new ISvgReader.OnCircleListener() {
             @Override
             public void onCircle(ISvgReader svg, double cx, double cy, double r) {
-                final ShapeCircle shape = new ShapeCircle((float)cx, (float)cy, (float)r,
-                        readPaint(svg));
-                shapeList.addLast(shape);
+                final ShapeCircle shape = ShapeCircle.newFromSvg(cx, cy, r, readPaint(svg));
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
         svg.setOnEllipseListener(new ISvgReader.OnEllipseListener() {
             @Override
             public void onEllipse(ISvgReader svg, double cx, double cy, double rx, double ry) {
-                final ShapeEllipse shape = new ShapeEllipse((float)cx, (float)cy,
-                        (float)rx, (float)ry, readPaint(svg));
-                shapeList.addLast(shape);
+                final ShapeEllipse shape = ShapeEllipse.newFromSvg(cx, cy, rx, ry, readPaint(svg));
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
         svg.setOnLineListener(new ISvgReader.OnLineListener() {
             @Override
             public void onLine(ISvgReader svg, double x1, double y1, double x2, double y2) {
-                final ShapeLine shape = new ShapeLine((float)x1, (float)y1, (float)x2, (float)y2,
-                        readPaint(svg));
-                shapeList.addLast(shape);
+                final ShapeLine shape = ShapeLine.newFromSvg(x1, y1, x2, y2, readPaint(svg));
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
         svg.setOnPolygonListener(new ISvgReader.OnPolygonListener() {
             @Override
-            public void onPolygon(ISvgReader svg, double x, double y, List<Double> pointList) {
-                final ArrayList<Float> list = new ArrayList<>();
-                for (double p : pointList)
-                    list.add((float)p);
-                final ShapePolygon shape = new ShapePolygon((float)x, (float)y, list,
-                        readPaint(svg));
-                shapeList.addLast(shape);
+            public void onPolygon(ISvgReader svg, List<Double> points) {
+                final ShapePolygon shape = ShapePolygon.newFromSvg(points, readPaint(svg));
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
         svg.setOnPolylineListener(new ISvgReader.OnPolylineListener() {
             @Override
-            public void onPolyline(ISvgReader svg, double x, double y, List<Double> pointList) {
-                final ArrayList<Float> list = new ArrayList<>();
-                for (double p : pointList)
-                    list.add((float)p);
-                final ShapePolyline shape = new ShapePolyline((float)x, (float)y, list,
-                        readPaint(svg));
-                shapeList.addLast(shape);
+            public void onPolyline(ISvgReader svg, List<Double> points) {
+                final ShapePolyline shape = ShapePolyline.newFromSvg(points, readPaint(svg));
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
         svg.setOnRectListener(new ISvgReader.OnRectListener() {
             @Override
             public void onRect(ISvgReader svg, double x, double y, double width, double height) {
-                float x1 = (float)x;
-                float y1 = (float)y;
-                float x2 = (float)(x + width);
-                float y2 = (float)(y + height);
-                final ShapeRect shape = new ShapeRect(x1, y1, x2, y2, readPaint(svg));
-                shapeList.addLast(shape);
+                final ShapeRect shape = ShapeRect.newFromSvg(x, y, width, height, readPaint(svg));
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
         svg.setOnTextListener(new ISvgReader.OnTextListener() {
             @Override
             public void onText(ISvgReader svg, double x, double y, String str) {
-                final ShapeText shape = new ShapeText((float)x, (float)y, str, readPaint(svg));
-                shapeList.addLast(shape);
+                final ShapeText shape = ShapeText.newFromSvg(x, y, str, readPaint(svg));
+                if (shape != null)
+                    shapeList.addLast(shape);
             }
         });
 
