@@ -2,6 +2,7 @@ package com.example.koba.testcanvas.shape;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 
 class ShapeArc extends ShapeBase {
@@ -77,10 +78,10 @@ class ShapeArc extends ShapeBase {
 
     /**
      * SVGの属性用
-     * @param x1 startX
-     * @param y1 startY
-     * @param x2 endX
-     * @param y2 endY
+     * @param mx startX
+     * @param my startY
+     * @param x endX
+     * @param y endY
      * @param rx メンバ変数に対応なし
      * @param ry メンバ変数に対応なし
      * @param xAxisRotation 値に関係なく0とみなす
@@ -88,12 +89,16 @@ class ShapeArc extends ShapeBase {
      * @param sweepFlag 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    static ShapeArc newFromSvg( double x1, double y1, double x2, double y2, double rx, double ry,
-              double xAxisRotation, boolean largeArcFlag, boolean sweepFlag, Paint paint) {
+    static ShapeArc newFromSvg( double mx, double my, double rx, double ry, double xAxisRotation,
+                                boolean largeArcFlag, boolean sweepFlag,
+                                double x, double y, Paint paint) {
         if (paint == null)
             return null;
 
-        // TODO 未実装  このコンストラクタが呼び出されると、画面描画時、SVG出力時に落ちる
+        // TODO 未実装
+
+        Log.d("arc", String.format("%f %f %f %f %f %b %b %f %f", mx, my, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y));
+
         return null;
     }
 
@@ -116,7 +121,7 @@ class ShapeArc extends ShapeBase {
 
         final double rx = Math.abs(x1 - x2) / 2;
         final double ry = Math.abs(y1 - y2) / 2;
-        svg.addPathArc(startX, startY, endX, endY, rx, ry, 0, largeArcFlag, sweepFlag);
+        svg.addPathArc(startX, startY, rx, ry, 0, largeArcFlag, sweepFlag, endX, endY);
     }
 
     @Override

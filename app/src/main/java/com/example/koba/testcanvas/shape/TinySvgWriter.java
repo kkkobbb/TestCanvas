@@ -152,16 +152,15 @@ class TinySvgWriter implements ISvgWriter {
     }
 
     @Override
-    public void addPathArc(double x1, double y1, double x2, double y2,
-                           double rx, double ry, double xAxisRotation,
-                           boolean largeArcFlag, boolean sweepFlag) {
+    public void addPathArc(double mx, double my, double rx, double ry, double xAxisRotation,
+                           boolean largeArcFlag, boolean sweepFlag, double x, double y) {
         final Element pathArc = document.createElement("path");
-        final String d = "M" + x1 + "," + y1 +
+        final String d = "M" + mx + "," + my +
                 " A" + rx + "," + ry +
                 " " + xAxisRotation +
                 " " + (largeArcFlag ? 1 : 0) +
                 " " + (sweepFlag ? 1 : 0) +
-                " " + x2 + "," + y2;
+                " " + x + "," + y;
         pathArc.setAttribute("d", d);
         setStroke(pathArc);
         pathArc.setAttribute("fill", "none");

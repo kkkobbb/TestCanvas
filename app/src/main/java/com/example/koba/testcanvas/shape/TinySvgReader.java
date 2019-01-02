@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * SVG読み込み 簡易版
+ *
+ * TinySvgWriterで出力したもののみ受け付ける
  */
 class TinySvgReader implements ISvgReader {
     private static final String TAG_SVG = "svg";
@@ -151,6 +154,10 @@ class TinySvgReader implements ISvgReader {
         onEllipseListener.onEllipse(this, cx, cy, rx, ry);
     }
 
+    /**
+     * 直線のタグの読み込み
+     * @param elem 対象のタグ
+     */
     private void readLine(Element elem) {
         if (onLineListener == null)
             return;
@@ -163,15 +170,85 @@ class TinySvgReader implements ISvgReader {
         onLineListener.onLine(this, x1, y1, x2, y2);
     }
 
+    /**
+     * Pathのタグの読み込み （円弧単体のみ）
+     * @param elem 対象のタグ
+     */
     private void readPath(Element elem) {
-        // 円弧のみ対応
         if (onPathArcListener == null)
             return;
         readAttr(elem);
 
-        // TODO 未実装
+        final String d = elem.getAttribute("d");
+        final LinkedList<String> dList = new LinkedList<>(Arrays.asList(d.split(" ")));
+
+        // 円弧のみのPATHでない場合、何もしない
+        if (dList.size() != 6)
+            return;
+
+        // 最初の指定位置を取得
+        final String m = dList.removeFirst();
+        if (!m.startsWith("M"))
+            return;
+        final Double[] mxmy = getXYArray(m.substring(1));
+        if (mxmy == null)
+            return;
+        final double mx = mxmy[0];
+        final double my = mxmy[1];
+
+        // 円弧にする円の半径を取得する
+        final String a = dList.removeFirst();
+        if (!a.startsWith("A"))
+            return;
+        final Double[] rxry = getXYArray(a.substring(1));
+        if (rxry == null)
+            return;
+        final double rx = rxry[0];
+        final double ry = rxry[1];
+
+        // 円弧の回転角度を取得する
+        final String xAR = dList.removeFirst();
+        final double xAxisRotation = Double.parseDouble(xAR);
+
+        // flag1を取得する
+        final String lAF = dList.removeFirst();
+        final boolean largeArcFlag = Integer.parseInt(lAF) != 0;
+
+        // flag2を取得する
+        final String sF = dList.removeFirst();
+        final boolean sweepFlag = Integer.parseInt(sF) != 0;
+
+        // 末端の座標を取得する
+        final String point = dList.removeFirst();
+        final Double[] xy = getXYArray(point);
+        if (xy == null)
+            return;
+        final double x = xy[0];
+        final double y = xy[1];
+
+        onPathArcListener.onPathArc(this, mx, my, rx, ry,
+                xAxisRotation, largeArcFlag, sweepFlag, x, y);
     }
 
+    /**
+     * "x,y"の形式の文字列を解析してDoubleの配列を返す
+     * @param xy "x,y"の形式の文字列
+     * @return Doubleに変換した値の配列
+     */
+    private Double[] getXYArray(String xy) {
+        final String[] xyArray = xy.split(",");
+        if (xyArray.length < 2)
+            return null;
+        final Double[] xyDoubleArray = new Double[2];
+        for (int i = 0; i < xyDoubleArray.length; i++)
+            xyDoubleArray[i] = Double.parseDouble(xyArray[i]);
+        return xyDoubleArray;
+    }
+
+    /**
+     * 多角形のタグの読み込み
+     * @param elem 対象のタグ
+     */
     private void readPolygon(Element elem) {
         if (onPolygonListener == null)
             return;
@@ -181,6 +258,10 @@ class TinySvgReader implements ISvgReader {
         onPolygonListener.onPolygon(this, points);
     }
 
+    /**
+     * 連続直線のタグの読み込み
+     * @param elem 対象のタグ
+     */
     private void readPolyline(Element elem) {
         if (onPolylineListener == null)
             return;
@@ -190,6 +271,10 @@ class TinySvgReader implements ISvgReader {
         onPolylineListener.onPolyline(this, points);
     }
 
+    /**
+     * 長方形のタグの読み込み
+     * @param elem 対象のタグ
+     */
     private void readRect(Element elem) {
         if (onRectListener == null)
             return;
@@ -201,6 +286,10 @@ class TinySvgReader implements ISvgReader {
         onRectListener.onRect(this, x, y, width, height);
     }
 
+    /**
+     * 文字列のタグの読み込み
+     * @param elem 対象のタグ
+     */
     private void readText(Element elem) {
         if (onTextListener == null)
             return;

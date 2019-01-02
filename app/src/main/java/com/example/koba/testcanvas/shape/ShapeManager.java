@@ -360,11 +360,11 @@ public class ShapeManager {
         // 各図形のイベント設定
         svg.setOnPathArcListener(new ISvgReader.OnPathArcListener() {
             @Override
-            public void onPathArc(ISvgReader svg, double x1, double y1,
-                                  double x2, double y2, double rx, double ry,
-                                  double xAxisRotation, boolean largeArcFlag, boolean sweepFlag) {
-                final ShapeArc shape = ShapeArc.newFromSvg(x1, y1, x2, y2, rx, ry,
-                        xAxisRotation, largeArcFlag, sweepFlag, readPaint(svg));
+            public void onPathArc(ISvgReader svg, double mx, double my, double rx, double ry,
+                                  double xAxisRotation, boolean largeArcFlag, boolean sweepFlag,
+                                  double x,  double y) {
+                final ShapeArc shape = ShapeArc.newFromSvg(mx, my, rx, ry,
+                        xAxisRotation, largeArcFlag, sweepFlag, x, y, readPaint(svg));
                 if (shape != null)
                     shapeList.addLast(shape);
             }

@@ -67,17 +67,18 @@ interface ISvgWriter {
 
     /**
      * パス（円弧1つ分）の追加
-     * @param x1 弧の始点のx座標
-     * @param y1 弧の始点のy座標
-     * @param x2 弧の終点のx座標
-     * @param y2 弧の終点のy座標
+     * @param mx 弧の始点のx座標
+     * @param my 弧の始点のy座標
      * @param rx 弧のx軸方向の半径
      * @param ry 弧のy軸方向の半径
      * @param xAxisRotation 楕円の回転角度
      * @param largeArcFlag 弧の選択 180度以上の弧か
      * @param sweepFlag 弧の選択 始点から時計回りか
+     * @param x 弧の終点のx座標
+     * @param y 弧の終点のy座標
      */
-    void addPathArc(double x1, double y1, double x2, double y2, double rx, double ry, double xAxisRotation, boolean largeArcFlag, boolean sweepFlag);
+    void addPathArc(double mx, double my, double rx, double ry, double xAxisRotation,
+                    boolean largeArcFlag, boolean sweepFlag, double x, double y);
 
     /**
      * 多角形の追加
