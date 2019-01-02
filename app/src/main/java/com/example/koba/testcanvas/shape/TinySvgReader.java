@@ -183,7 +183,7 @@ class TinySvgReader implements ISvgReader {
         final LinkedList<String> dList = new LinkedList<>(Arrays.asList(d.split(" ")));
 
         // 円弧のみのPATHでない場合、何もしない
-        if (dList.size() != 6)
+        if (dList.size() != 5)
             return;
 
         // 最初の指定位置を取得
@@ -210,13 +210,11 @@ class TinySvgReader implements ISvgReader {
         final String xAR = dList.removeFirst();
         final double xAxisRotation = Double.parseDouble(xAR);
 
-        // flag1を取得する
-        final String lAF = dList.removeFirst();
-        final boolean largeArcFlag = Integer.parseInt(lAF) != 0;
-
-        // flag2を取得する
-        final String sF = dList.removeFirst();
-        final boolean sweepFlag = Integer.parseInt(sF) != 0;
+        // flagを取得する
+        final String flags = dList.removeFirst();
+        final String[] flagsArray = flags.split(",");
+        final boolean largeArcFlag = Integer.parseInt(flagsArray[0]) != 0;
+        final boolean sweepFlag = Integer.parseInt(flagsArray[1]) != 0;
 
         // 末端の座標を取得する
         final String point = dList.removeFirst();

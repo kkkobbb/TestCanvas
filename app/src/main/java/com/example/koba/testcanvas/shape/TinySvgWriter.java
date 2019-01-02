@@ -158,8 +158,7 @@ class TinySvgWriter implements ISvgWriter {
         final String d = "M" + mx + "," + my +
                 " A" + rx + "," + ry +
                 " " + xAxisRotation +
-                " " + (largeArcFlag ? 1 : 0) +
-                " " + (sweepFlag ? 1 : 0) +
+                " " + (largeArcFlag ? 1 : 0) + "," + (sweepFlag ? 1 : 0) +
                 " " + x + "," + y;
         pathArc.setAttribute("d", d);
         setStroke(pathArc);
