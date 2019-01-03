@@ -2,7 +2,6 @@ package com.example.koba.testcanvas.shape;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 
 class ShapeArc extends ShapeBase {
@@ -82,6 +81,71 @@ class ShapeArc extends ShapeBase {
      * @param my startY
      * @param x endX
      * @param y endY
+     * @param r 半径
+     * @param largeArcFlag 同名メンバ変数
+     * @param sweepFlag 同名メンバ変数
+     * @param paint 同名メンバ変数
+     */
+    private ShapeArc(double mx, double my, double r,
+                     boolean largeArcFlag, boolean sweepFlag,
+                     double x, double y, Paint paint) {
+        super(paint);
+        // 点P(mx, my) 点R(x, y)とする
+        // 線分PQの中点を点Iとする
+        // 点Iを通る線分PQの垂線を垂線Sとする
+        // 円C(半径r、点P、Rを通る)上の点を点Qとする (円Cの中心をCとする)
+        // 点Qを求めて3点目を指定することでcanvas描画用の変数を設定する
+
+        startX = (float)mx;
+        startY = (float)my;
+        changePoint((float)x, (float)y);
+
+        final double a = getPerpendicular(mx, my, x, y).v1;  // 垂線Sの傾き
+        final double ix = (mx + x) / 2;  // 点Iのx座標
+        final double iy = (my + y) / 2;  // 点Iのy座標
+        final double pi2 = getDistance2(mx, my, ix, iy);  // 線分PIの長さの2乗
+        final double ci = Math.sqrt(Math.pow(r, 2) - pi2);  // 線分CIの長さ
+
+        final double qi;  // 線分QIの長さ
+        if (largeArcFlag)
+            qi = r + ci;
+        else
+            qi = r - ci;
+
+        final double qx;  // 点Qのx座標
+        final double qy;  // 点Qのy座標
+        if (a == 0) {  // 垂線Sがx軸と平行
+            // 弧の向きによる符号反転
+            final double signDiff = ((mx >= x && sweepFlag) || (mx < x && !sweepFlag)) ? 1 : -1;
+            qx = ix;
+            qy = iy + signDiff * qi;
+        } else {
+            // 弧の向きによる符号反転
+            final double signDiff = ((my >= y && sweepFlag) || (my < y && !sweepFlag)) ? -1 : 1;
+            if (Double.isInfinite(a)) {  // 垂線Sがy軸と平行
+                qx = ix + signDiff * qi;
+                qy = iy;
+            } else {  // 垂線Sが y=ax+b (a!=0) で表せる
+                final double cos2A = 1 / (Math.pow(a, 2) + 1);
+                final double cosA = Math.sqrt(cos2A);  // 垂線とx軸のなす角
+                final double sinA = Math.sqrt(1 - cos2A);  // 垂線とx軸のなす角
+                final double dqx = qi * cosA;  // 点Qと点Iの差分 (x座標)
+                final double dqy = qi * sinA;  // 点Qと点Iの差分 (y座標)
+                final double signXY = Math.signum(a);  // qx qy での差分の符号反転
+                qx = ix + signDiff * dqx;
+                qy = iy + signDiff * signXY * dqy;
+            }
+        }
+
+        addPoint((float)qx, (float)qy);
+    }
+
+    /**
+     * SVGの属性用
+     * @param mx startX
+     * @param my startY
+     * @param x endX
+     * @param y endY
      * @param rx メンバ変数に対応なし
      * @param ry メンバ変数に対応なし
      * @param xAxisRotation 値に関係なく0とみなす
@@ -89,17 +153,27 @@ class ShapeArc extends ShapeBase {
      * @param sweepFlag 同名メンバ変数
      * @param paint 同名メンバ変数
      */
-    static ShapeArc newFromSvg( double mx, double my, double rx, double ry, double xAxisRotation,
-                                boolean largeArcFlag, boolean sweepFlag,
-                                double x, double y, Paint paint) {
+    static ShapeArc newFromSvg(double mx, double my, double rx, double ry, double xAxisRotation,
+                               boolean largeArcFlag, boolean sweepFlag,
+                               double x, double y, Paint paint) {
+        // 誤差の許容範囲は適当 (もっと厳しくしてもいいかも)
         if (paint == null)
             return null;
+        if (xAxisRotation != 0)  // 回転に未対応
+            return null;
+        if (Math.abs(rx - ry) > 0.01)  // 真円以外に未対応 (誤差の許容)
+            return null;
 
-        // TODO 未実装
+        // 半円の場合、(float, float, paint)コンストラクタを使う
+        final double pointsDistance2 = Math.pow(mx - x, 2) + Math.pow(my - y, 2);
+        final double dia = Math.pow(rx * 2, 2);  // 直径の2乗
+        if (Math.abs(pointsDistance2 - dia) < 0.01) {  // 誤差の許容
+            final ShapeArc shape = new ShapeArc((float)mx, (float)my, paint);
+            shape.changePoint((float)x, (float)y);
+            return shape;
+        }
 
-        Log.d("arc", String.format("%f %f %f %f %f %b %b %f %f", mx, my, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y));
-
-        return null;
+        return new ShapeArc(mx, my, rx, largeArcFlag, sweepFlag, x, y, paint);
     }
 
     @Override
