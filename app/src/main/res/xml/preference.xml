@@ -16,5 +16,11 @@
             android:key="@string/setting_key_sa_undo"
             android:defaultValue="false"/>
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/setting_load_svg">
+        <SwitchPreference
+            android:title="@string/setting_ls_clean"
+            android:key="@string/setting_key_ls_clean"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>

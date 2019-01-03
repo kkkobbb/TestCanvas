@@ -47,4 +47,17 @@ class SettingManager {
         // (取得できなかった場合、xmlのデフォルト値に関係なくfalseを返す)
         return sp.getBoolean(key, false);
     }
+
+    /**
+     * 設定の取得 (新規として読み込む)
+     * @param context コンテキスト
+     * @return 設定値
+     */
+    static boolean getLoadSvgClean(Context context) {
+        final SharedPreferences sp = context.getSharedPreferences(
+                SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        final String key = context.getString(R.string.setting_key_ls_clean);
+        // (取得できなかった場合、xmlのデフォルト値に関係なくfalseを返す)
+        return sp.getBoolean(key, false);
+    }
 }

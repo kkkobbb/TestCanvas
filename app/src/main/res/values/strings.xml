@@ -5,7 +5,7 @@
     <string name="menu_setting">設定</string>
     <string name="menu_load">SVGファイルを読み込み</string>
     <string name="menu_copy_path">保存先パスをコピー</string>
-    <string name="menu_clear">全削除</string>
+    <string name="menu_undo_all">全削除</string>
 
     <string name="button_undo">戻る</string>
     <string name="button_redo">進む</string>
@@ -32,6 +32,9 @@
     <string name="setting_start_action">起動時の動作</string>
     <string name="setting_st_load">起動時に前回の状態を復元する</string>
     <string name="setting_key_st_load">start_action_load</string>
+    <string name="setting_load_svg">SVG読み込み時の動作</string>
+    <string name="setting_ls_clean">新規として読み込む</string>
+    <string name="setting_key_ls_clean">load_svg_clean</string>
 
     <string name="error_string">error</string>
     <string-array name="error_shape_types">

@@ -120,6 +120,15 @@ public class ShapeManager {
     }
 
     /**
+     * 図形を削除、履歴も削除
+     */
+    public void clean() {
+        shapeList.clear();
+        undoList.clear();
+        drawing = false;
+    }
+
+    /**
      * 描画する図形を選択する
      * getShapeIdList()で返すリストのインデックスのみ受け付ける
      * @param n 図形の番号

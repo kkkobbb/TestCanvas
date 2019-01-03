@@ -55,6 +55,7 @@ import java.util.Objects;
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class DrawingFragment extends Fragment {
+    private Context context;
     private View view;
     private DrawingView drawingView;
     private ShapeManager shapeManager;
@@ -116,6 +117,8 @@ public class DrawingFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
 
+        context = Objects.requireNonNull(getContext());
+
         shapeManager = new ShapeManager();
         final Fragment self = this;
         shapeManager.setOnSetTextListener(new ShapeManager.OnSetTextListener() {
@@ -132,7 +135,6 @@ public class DrawingFragment extends Fragment {
         });
 
         // 起動時、設定されている場合、内部データを読み込む
-        final Context context = Objects.requireNonNull(getContext());
         if (savedInstanceState == null && SettingManager.getStartActionLoad(context))
             restoreInnerData();
 
@@ -278,7 +280,6 @@ public class DrawingFragment extends Fragment {
                 buttonUndo.setEnabled(shapeManager.canUndo());
                 buttonRedo.setEnabled(shapeManager.canRedo());
 
-                final Context context = Objects.requireNonNull(getContext());
                 // 戻るした図形の表示
                 if (SettingManager.getShapeAppearanceUndo(context))
                     shapeManager.drawUndo(canvas);
@@ -379,8 +380,8 @@ public class DrawingFragment extends Fragment {
             case R.id.menu_copy_path:
                 copySavePath();
                 return true;
-            case R.id.menu_clear:
-                clearAll();
+            case R.id.menu_undo_all:
+                undoAll();
                 return true;
             case R.id.menu_setting:
                 setting();
@@ -573,7 +574,6 @@ public class DrawingFragment extends Fragment {
     @NonNull
     private File getInnerDataFile() {
         // 内部領域のキャッシュ領域を利用する
-        final Context context = Objects.requireNonNull(getContext());
         return new File(context.getCacheDir(), INNER_SAVE_BASE_NAME);
     }
 
@@ -628,7 +628,7 @@ public class DrawingFragment extends Fragment {
         show(saveDir.getPath());
     }
 
-    private void clearAll() {
+    private void undoAll() {
         // 全ての操作を元に戻す
         while (shapeManager.canUndo())
             shapeManager.undo();
@@ -662,6 +662,8 @@ public class DrawingFragment extends Fragment {
         final Activity activity = Objects.requireNonNull(getActivity());
         try (final InputStream is = activity.getContentResolver().openInputStream(uri);
              final BufferedInputStream stream = new BufferedInputStream(is)) {
+            if (SettingManager.getLoadSvgClean(context))
+                shapeManager.clean();
             read = shapeManager.read(stream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -669,6 +671,7 @@ public class DrawingFragment extends Fragment {
 
         if (read) {
             show("ファイルを読み込みました");
+            shapeManager.fix();
             drawingView.invalidate();
         } else {
             show("ファイル読み込みに失敗しました");
