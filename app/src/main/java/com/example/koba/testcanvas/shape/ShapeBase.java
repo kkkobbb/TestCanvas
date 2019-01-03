@@ -110,7 +110,6 @@ abstract class ShapeBase implements Serializable {
      * </div>
      * @return 同じ図形のもの
      */
-    //
     abstract ShapeBase copyShape();
 
     /**

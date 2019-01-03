@@ -93,7 +93,7 @@ class ShapeArc extends ShapeBase {
         // 点P(mx, my) 点R(x, y)とする
         // 線分PQの中点を点Iとする
         // 点Iを通る線分PQの垂線を垂線Sとする
-        // 円C(半径r、点P、Rを通る)上の点を点Qとする (円Cの中心をCとする)
+        // 円C(半径r、点P、Rを通る)上の点を点Qとする (円Cの中心を点Cとする)
         // 点Qを求めて3点目を指定することでcanvas描画用の変数を設定する
 
         startX = (float)mx;

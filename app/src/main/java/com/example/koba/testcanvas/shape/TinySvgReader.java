@@ -79,11 +79,13 @@ class TinySvgReader implements ISvgReader {
         return true;
     }
 
+    @Override
     public boolean parse() {
         if (svg == null)
             return false;
 
         // 子ノード取得
+        // svgタグ直下の図形のみ処理する
         final NodeList nodeList = svg.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             final Node node = nodeList.item(i);
@@ -93,28 +95,28 @@ class TinySvgReader implements ISvgReader {
             final String name = elem.getTagName();
             switch (name) {
                 case TAG_CIRCLE:
-                    readCircle(elem);
+                    parseCircle(elem);
                     break;
                 case TAG_ELLIPSE:
-                    readEllipse(elem);
+                    parseEllipse(elem);
                     break;
                 case TAG_LINE:
-                    readLine(elem);
+                    parseLine(elem);
                     break;
                 case TAG_PATH:
-                    readPath(elem);
+                    parsePath(elem);
                     break;
                 case TAG_POLYGON:
-                    readPolygon(elem);
+                    parsePolygon(elem);
                     break;
                 case TAG_POLYLINE:
-                    readPolyline(elem);
+                    parsePolyline(elem);
                     break;
                 case TAG_RECT:
-                    readRect(elem);
+                    parseRect(elem);
                     break;
                 case TAG_TEXT:
-                    readText(elem);
+                    parseText(elem);
                     break;
                 default:
                     // 上記以外の場合、無視する
@@ -129,10 +131,10 @@ class TinySvgReader implements ISvgReader {
      * 円のタグの読み込み
      * @param elem 対象のタグ
      */
-    private void readCircle(Element elem) {
+    private void parseCircle(Element elem) {
         if (onCircleListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
         final double cx = Double.parseDouble(elem.getAttribute("cx"));
         final double cy = Double.parseDouble(elem.getAttribute("cy"));
         final double r = Double.parseDouble(elem.getAttribute("r"));
@@ -143,10 +145,10 @@ class TinySvgReader implements ISvgReader {
      * 楕円のタグの読み込み
      * @param elem 対象のタグ
      */
-    private void readEllipse(Element elem) {
+    private void parseEllipse(Element elem) {
         if (onEllipseListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
         final double cx = Double.parseDouble(elem.getAttribute("cx"));
         final double cy = Double.parseDouble(elem.getAttribute("cy"));
         final double rx = Double.parseDouble(elem.getAttribute("rx"));
@@ -158,10 +160,10 @@ class TinySvgReader implements ISvgReader {
      * 直線のタグの読み込み
      * @param elem 対象のタグ
      */
-    private void readLine(Element elem) {
+    private void parseLine(Element elem) {
         if (onLineListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
         fill = "none"; // 塗りつぶしなし扱いをする
         final double x1 = Double.parseDouble(elem.getAttribute("x1"));
         final double y1 = Double.parseDouble(elem.getAttribute("y1"));
@@ -174,10 +176,10 @@ class TinySvgReader implements ISvgReader {
      * Pathのタグの読み込み （円弧単体のみ）
      * @param elem 対象のタグ
      */
-    private void readPath(Element elem) {
+    private void parsePath(Element elem) {
         if (onPathArcListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
 
         final String d = elem.getAttribute("d");
         final LinkedList<String> dList = new LinkedList<>(Arrays.asList(d.split(" ")));
@@ -247,10 +249,10 @@ class TinySvgReader implements ISvgReader {
      * 多角形のタグの読み込み
      * @param elem 対象のタグ
      */
-    private void readPolygon(Element elem) {
+    private void parsePolygon(Element elem) {
         if (onPolygonListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
         final String pointsStr = elem.getAttribute("points");
         final List<Double> points = getPointList(pointsStr);
         onPolygonListener.onPolygon(this, points);
@@ -260,10 +262,10 @@ class TinySvgReader implements ISvgReader {
      * 連続直線のタグの読み込み
      * @param elem 対象のタグ
      */
-    private void readPolyline(Element elem) {
+    private void parsePolyline(Element elem) {
         if (onPolylineListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
         final String pointsStr = elem.getAttribute("points");
         final List<Double> points = getPointList(pointsStr);
         onPolylineListener.onPolyline(this, points);
@@ -273,10 +275,10 @@ class TinySvgReader implements ISvgReader {
      * 長方形のタグの読み込み
      * @param elem 対象のタグ
      */
-    private void readRect(Element elem) {
+    private void parseRect(Element elem) {
         if (onRectListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
         final double x = Double.parseDouble(elem.getAttribute("x"));
         final double y = Double.parseDouble(elem.getAttribute("y"));
         final double width = Double.parseDouble(elem.getAttribute("width"));
@@ -288,10 +290,10 @@ class TinySvgReader implements ISvgReader {
      * 文字列のタグの読み込み
      * @param elem 対象のタグ
      */
-    private void readText(Element elem) {
+    private void parseText(Element elem) {
         if (onTextListener == null)
             return;
-        readAttr(elem);
+        parseAttr(elem);
         final double x = Double.parseDouble(elem.getAttribute("x"));
         final double y = Double.parseDouble(elem.getAttribute("y"));
         final String str = elem.getTextContent();
@@ -302,7 +304,7 @@ class TinySvgReader implements ISvgReader {
      * 属性を読み込む
      * @param elem 対象のタグ
      */
-    private void readAttr(Element elem) {
+    private void parseAttr(Element elem) {
         // 色(色と透過値)の取得
         double opacity = 1;  // 0 <= opacity <= 1
         if (elem.hasAttribute("stroke-opacity"))

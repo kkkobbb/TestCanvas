@@ -15,11 +15,8 @@ class SettingManager {
      * @return 設定値
      */
     static boolean getStartActionLoad(Context context) {
-        final SharedPreferences sp = context.getSharedPreferences(
-                SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         final String key = context.getString(R.string.setting_key_st_load);
-        // (取得できなかった場合、xmlのデフォルト値に関係なくfalseを返す)
-        return sp.getBoolean(key, false);
+        return getBoolean(context, key);
     }
 
     /**
@@ -28,11 +25,8 @@ class SettingManager {
      * @return 設定値
      */
     static boolean getShapeAppearanceTransfer(Context context) {
-        final SharedPreferences sp = context.getSharedPreferences(
-                SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         final String key = context.getString(R.string.setting_key_sa_transfer);
-        // (取得できなかった場合、xmlのデフォルト値に関係なくfalseを返す)
-        return sp.getBoolean(key, false);
+        return getBoolean(context, key);
     }
 
     /**
@@ -41,11 +35,8 @@ class SettingManager {
      * @return 設定値
      */
     static boolean getShapeAppearanceUndo(Context context) {
-        final SharedPreferences sp = context.getSharedPreferences(
-                SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         final String key = context.getString(R.string.setting_key_sa_undo);
-        // (取得できなかった場合、xmlのデフォルト値に関係なくfalseを返す)
-        return sp.getBoolean(key, false);
+        return getBoolean(context, key);
     }
 
     /**
@@ -54,9 +45,19 @@ class SettingManager {
      * @return 設定値
      */
     static boolean getLoadSvgClean(Context context) {
+        final String key = context.getString(R.string.setting_key_ls_clean);
+        return getBoolean(context, key);
+    }
+
+    /**
+     * 指定されたキーの値を返す (真偽値用)
+     * @param context コンテキスト
+     * @param key 値を取得するキー
+     * @return 設定値 (取得に失敗した場合、false)
+     */
+    private static boolean getBoolean(Context context, String key) {
         final SharedPreferences sp = context.getSharedPreferences(
                 SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        final String key = context.getString(R.string.setting_key_ls_clean);
         // (取得できなかった場合、xmlのデフォルト値に関係なくfalseを返す)
         return sp.getBoolean(key, false);
     }

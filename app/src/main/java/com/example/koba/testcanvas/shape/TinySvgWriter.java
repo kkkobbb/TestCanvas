@@ -24,7 +24,9 @@ import javax.xml.transform.stream.StreamResult;
 class TinySvgWriter implements ISvgWriter {
     private static final String NS_SVG = "http://www.w3.org/2000/svg";
     private static final String NS_XLINK = "http://www.w3.org/1999/xlink";
+
     private Document document;
+
     private int strokeColor = 0xff000000;
     private float strokeWidth = 1;
     private float fontSize = 20;
