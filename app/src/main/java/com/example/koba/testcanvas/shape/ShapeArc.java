@@ -90,11 +90,13 @@ class ShapeArc extends ShapeBase {
                      boolean largeArcFlag, boolean sweepFlag,
                      double x, double y, Paint paint) {
         super(paint);
-        // 点P(mx, my) 点R(x, y)とする
-        // 線分PQの中点を点Iとする
-        // 点Iを通る線分PQの垂線を垂線Sとする
-        // 円C(半径r、点P、Rを通る)上の点を点Qとする (円Cの中心を点Cとする)
-        // 点Qを求めて3点目を指定することでcanvas描画用の変数を設定する
+        /*
+         * 点P(mx, my) 点R(x, y)とする
+         * 線分PQの中点を点Iとする
+         * 点Iを通る線分PQの垂線を垂線Sとする
+         * 円C(半径r、点P、Rを通る)上の点を点Qとする (円Cの中心を点Cとする)
+         * 点Qを求めて3点目を指定することでcanvas描画用の変数を設定する
+         */
 
         startX = (float)mx;
         startY = (float)my;
@@ -115,23 +117,40 @@ class ShapeArc extends ShapeBase {
         final double qx;  // 点Qのx座標
         final double qy;  // 点Qのy座標
         if (a == 0) {  // 垂線Sがx軸と平行
-            // 弧の向きによる符号反転
+            /*
+             * 弧の向きによる符号反転
+             * sweepFlagが真の場合、始点(mx,my)から反時計周りに弧を描く
+             * x軸と平行の場合、始点が終点(x,y)より原点から遠い場合、見かけ上位置が反転する
+             */
             final double signDiff = ((mx >= x && sweepFlag) || (mx < x && !sweepFlag)) ? 1 : -1;
             qx = ix;
             qy = iy + signDiff * qi;
         } else {
-            // 弧の向きによる符号反転
+            /*
+             * 弧の向きによる符号反転
+             * sweepFlagが真の場合、始点(mx,my)から反時計周りに弧を描く
+             * x軸と平行でない場合、始点が終点(x,y)よりy軸方向に原点から遠い場合、
+             * 見かけ上位置が反転する
+             */
             final double signDiff = ((my >= y && sweepFlag) || (my < y && !sweepFlag)) ? -1 : 1;
             if (Double.isInfinite(a)) {  // 垂線Sがy軸と平行
                 qx = ix + signDiff * qi;
                 qy = iy;
             } else {  // 垂線Sが y=ax+b (a!=0) で表せる
                 final double cos2A = 1 / (Math.pow(a, 2) + 1);
-                final double cosA = Math.sqrt(cos2A);  // 垂線とx軸のなす角
-                final double sinA = Math.sqrt(1 - cos2A);  // 垂線とx軸のなす角
+                final double cosA = Math.sqrt(cos2A);  // 垂線とx軸のなす鋭角
+                final double sinA = Math.sqrt(1 - cos2A);  // 垂線とx軸のなす鋭角
                 final double dqx = qi * cosA;  // 点Qと点Iの差分 (x座標)
                 final double dqy = qi * sinA;  // 点Qと点Iの差分 (y座標)
-                final double signXY = Math.signum(a);  // qx qy での差分の符号反転
+                /*
+                 * qx qy での差分の符号反転
+                 * 直線L(y=ax)を見たとき、(垂線Sの中点Iを原点とした場合)
+                 * (if分岐で a!=0である)
+                 * a > 0: 直線L上の点は第1象限か第3象限にあるので、x座標とy座標は同じ符号となる
+                 * a < 0: 直線L上の点は第2象限か第4象限にあるので、x座標とy座標は異なる符号となる
+                 * したがって、aによって差分の追加の仕方が変わる
+                 */
+                final double signXY = Math.signum(a);
                 qx = ix + signDiff * dqx;
                 qy = iy + signDiff * signXY * dqy;
             }
