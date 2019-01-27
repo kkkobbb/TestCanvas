@@ -44,6 +44,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -158,7 +159,7 @@ public class DrawingFragment extends Fragment {
         // 前回の状態がある場合、設定する
         if (savedInstanceState != null) {
             shapeManager.restoreInstanceState(savedInstanceState);
-            state = State.class.cast(savedInstanceState.getSerializable(BUNDLE_KEY_STATE));
+            state = (State) savedInstanceState.getSerializable(BUNDLE_KEY_STATE);
             shapeTypePosition = savedInstanceState.getInt(BUNDLE_KEY_SHAPETYPE);
         }
 
@@ -375,7 +376,7 @@ public class DrawingFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_save:
-                saveDialog();
+                saveIfPossible();
                 return true;
             case R.id.menu_copy_path:
                 copySavePath();
@@ -397,7 +398,7 @@ public class DrawingFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_SAVE_DIALOG:
-                resultSaveDialog(resultCode, data);
+                resultSaveIfPossible(resultCode, data);
                 break;
             case REQUEST_CODE_REWRITE_DIALOG:
                 resultRewriteDialog(resultCode, data);
@@ -421,7 +422,7 @@ public class DrawingFragment extends Fragment {
      * @param resultCode 結果
      * @param data 保存先パス
      */
-    private void resultSaveDialog(int resultCode, Intent data) {
+    private void resultSaveIfPossible(int resultCode, Intent data) {
         switch (resultCode) {
             case Activity.RESULT_OK:
                 final String savePathName = data.getStringExtra(Intent.EXTRA_TEXT);
@@ -461,9 +462,11 @@ public class DrawingFragment extends Fragment {
     }
 
     /**
-     * 現在の絵を保存する （保存確認ダイアログあり）
+     * 可能ならば、現在の絵を保存する
+     *  (パーミッション確認あり)
+     * （保存確認ダイアログあり）
      */
-    private void saveDialog() {
+    private void saveIfPossible() {
         if (!hasPermissionSTORAGE()) {
             requestPermissionSTORAGE();
             return;
@@ -476,7 +479,7 @@ public class DrawingFragment extends Fragment {
                 "ファイル保存確認", savePathName + "として保存しますか");
         final FragmentManager fm = getFragmentManager();
         if (fm != null)
-            df.show(fm, "saveDialog");
+            df.show(fm, "saveIfPossible");
     }
 
     /**
@@ -498,7 +501,7 @@ public class DrawingFragment extends Fragment {
                     "上書き確認", savePath + "を上書きしますか");
             final FragmentManager fm = getFragmentManager();
             if (fm != null)
-                df.show(fm, "saveDialog");
+                df.show(fm, "save");
             return;
         }
 
@@ -525,7 +528,7 @@ public class DrawingFragment extends Fragment {
     private void writeTo(File outputPath) {
         boolean wrote = false;
         try (final FileOutputStream stream = new FileOutputStream(outputPath, false);
-             final OutputStreamWriter ow = new OutputStreamWriter(stream, "UTF-8");
+             final OutputStreamWriter ow = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
              final BufferedWriter writer = new BufferedWriter(ow)) {
             wrote = shapeManager.writeTo(writer);
         } catch (IOException e) {
@@ -600,7 +603,7 @@ public class DrawingFragment extends Fragment {
         switch (requestCode) {
             case REQUEST_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    saveDialog();
+                    saveIfPossible();
                 } else {
                     // パーミッションが得られなかった場合、メッセージ表示
                     if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
