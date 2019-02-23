@@ -25,7 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 /**
  * ShapeBase継承クラスの管理 (生成、削除等)
  */
-public class ShapeManager {
+public final class ShapeManager {
     private List<ShapeCreator> shapeCreatorList;
     private int selectedShape;
 
