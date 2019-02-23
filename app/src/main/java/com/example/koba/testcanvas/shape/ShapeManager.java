@@ -42,9 +42,7 @@ public final class ShapeManager {
     private double height = -1;
     private LinkedList<ShapeBase> shapeList;  // 書いた順に格納する
     private LinkedList<ShapeBase> undoList;  // 戻した順に格納する
-    /**
-     * 図形の描画を継続中の場合、真
-     */
+    /** 図形の描画を継続中の場合、真 */
     private boolean drawing = false;
 
     private float baseX = 0;  // 移動量の基準位置 x座標
@@ -54,9 +52,7 @@ public final class ShapeManager {
     private static final String BUNDLE_KEY_UNDOLIST = "ShapeManagerUndoList";
     private static final String BUNDLE_KEY_DRAWING = "ShapeManagerDrawing";
 
-    /**
-     * 文字列設定用イベントリスナー
-     */
+    /** 文字列設定用イベントリスナー */
     private OnSetTextListener onSetTextListener;
 
     public ShapeManager() {

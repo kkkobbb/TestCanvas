@@ -92,10 +92,10 @@ class ShapeArc extends ShapeBase {
         super(paint);
         /*
          * 点P(mx, my) 点R(x, y)とする
+         * 円C(半径r、点P、Rを通る)上の点を点Qとする (円Cの中心を点Cとする)
          * 線分PQの中点を点Iとする
          * 点Iを通る線分PQの垂線を垂線Sとする
-         * 円C(半径r、点P、Rを通る)上の点を点Qとする (円Cの中心を点Cとする)
-         * 点Qを求めて3点目を指定することでcanvas描画用の変数を設定する
+         * 点P、点Rと重ならない点Qを求めて3点目とすることでcanvas描画用の変数を設定する
          */
 
         startX = (float)mx;
@@ -145,7 +145,7 @@ class ShapeArc extends ShapeBase {
                 /*
                  * qx qy での差分の符号反転
                  * 直線L(y=ax)を見たとき、(垂線Sの中点Iを原点とした場合)
-                 * (if分岐で a!=0である)
+                 * (前提として、if分岐で a!=0である)
                  * a > 0: 直線L上の点は第1象限か第3象限にあるので、x座標とy座標は同じ符号となる
                  * a < 0: 直線L上の点は第2象限か第4象限にあるので、x座標とy座標は異なる符号となる
                  * したがって、aによって差分の追加の仕方が変わる
@@ -429,13 +429,9 @@ class ShapeArc extends ShapeBase {
     }
 
     private enum State {
-        /**
-         * 端点変更
-         */
+        /** 端点変更 */
         CHANGE_POINT,
-        /**
-         * 弧のサイズ変更
-         */
+        /** 弧のサイズ変更 */
         CHANGE_CIRCLE
     }
 

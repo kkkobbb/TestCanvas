@@ -60,45 +60,25 @@ public class DrawingFragment extends Fragment {
     private View view;
     private DrawingView drawingView;
     private ShapeManager shapeManager;
-    /**
-     * 操作モードのリスト
-     */
+    /** 操作モードのリスト */
     private final List<State> stateList = Arrays.asList(State.DRAWING, State.TRANSFER, State.COPY);
-    /**
-     * ファイル保存先ディレクトリ名
-     */
+    /** ファイル保存先ディレクトリ名 */
     private File saveDir;
-    /**
-     * ファイル名の共通部分
-     */
+    /** ファイル名の共通部分 */
     private static final String SAVE_BASE_NAME = "canvas";
-    /**
-     * 内部データ保存用ファイル名
-     */
+    /** 内部データ保存用ファイル名 */
     private static final String INNER_SAVE_BASE_NAME = "innerdata.dat";
-    /**
-     * 現在の操作モード
-     */
+    /** 現在の操作モード */
     private State state = State.DRAWING;
-    /**
-     * パーミッション許可確認用
-     */
+    /** パーミッション許可確認用 */
     private static final int REQUEST_PERMISSION = 1;
-    /**
-     * Intent受け取り用 保存確認
-     */
+    /** Intent受け取り用 保存確認 */
     private static final int REQUEST_CODE_SAVE_DIALOG = 0;
-    /**
-     * Intent受け取り用 上書き確認
-     */
+    /** Intent受け取り用 上書き確認 */
     private static final int REQUEST_CODE_REWRITE_DIALOG = 1;
-    /**
-     * Intent受け取り用 ダイアログから文字列取得
-     */
+    /** Intent受け取り用 ダイアログから文字列取得 */
     private static final int REQUEST_CODE_SET_STRING = 2;
-    /**
-     * Intent受け取り用 ファイルパス取得
-     */
+    /** Intent受け取り用 ファイルパス取得 */
     private static final int REQUEST_CODE_SELECT_LOAD_FILE = 3;
 
     private static final String BUNDLE_KEY_STATE = "DrawingFragmentState";
@@ -682,17 +662,11 @@ public class DrawingFragment extends Fragment {
     }
 
     private enum State {
-        /**
-         * 図形描画モード
-         */
+        /** 図形描画モード */
         DRAWING(R.string.button_state_draw),
-        /**
-         * 図形移動モード
-         */
+        /** 図形移動モード */
         TRANSFER(R.string.button_state_transfer),
-        /**
-         * 図形複製モード
-         */
+        /** 図形複製モード */
         COPY(R.string.button_state_copy);
 
         private final int id;
