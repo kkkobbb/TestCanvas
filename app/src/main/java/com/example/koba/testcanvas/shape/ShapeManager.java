@@ -26,7 +26,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * ShapeBase継承クラスの管理 (生成、削除等)
  */
 public final class ShapeManager {
-    private List<ShapeCreator> shapeCreatorList;
+    private final List<ShapeCreator> shapeCreatorList;
     private int selectedShape;
 
     @ColorInt private final static int DEFAULT_COLOR = 0xffff00ff;
@@ -340,7 +340,7 @@ public final class ShapeManager {
      * @return 出力に成功した場合、真
      */
     public boolean writeTo(Writer writer) {
-        ISvgWriter svg;
+        final ISvgWriter svg;
         try {
             svg = new TinySvgWriter();
         } catch (ParserConfigurationException e) {
@@ -358,7 +358,7 @@ public final class ShapeManager {
     }
 
     public boolean read(InputStream stream) {
-        ISvgReader svg = new TinySvgReader();
+        final ISvgReader svg = new TinySvgReader();
         if (!svg.read(stream))
             return false;
 
@@ -496,7 +496,7 @@ public final class ShapeManager {
         }
 
         ShapeBase create(float x, float y, Paint paint) {
-            ShapeBase shape;
+            final ShapeBase shape;
             try {
                 // コンストラクタ呼び出し
                 final Constructor<? extends ShapeBase> c = clazz.getDeclaredConstructor(float.class, float.class, Paint.class);
