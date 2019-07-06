@@ -67,8 +67,16 @@ class TinySvgWriter implements ISvgWriter {
     @Override
     public void setSvgSize(double width, double height) {
         final Element svg = document.getDocumentElement();
-        svg.setAttribute("width", String.valueOf(width));
-        svg.setAttribute("height", String.valueOf(height));
+
+        // サイズ設定
+        final String w = String.valueOf(width);
+        final String h = String.valueOf(height);
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+
+        // viewBox設定
+        final String viewBoxValue = "0 0 " + w + " " + h;
+        svg.setAttribute("viewBox", viewBoxValue);
     }
 
     @Override
