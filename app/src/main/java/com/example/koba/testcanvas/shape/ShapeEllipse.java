@@ -85,6 +85,11 @@ class ShapeEllipse extends ShapeBase {
     }
 
     @Override
+    String getAttrId() {
+        return attrId;
+    }
+
+    @Override
     void setPoint(float x, float y) {
         rx = Math.abs(this.cx - x);
         ry = Math.abs(this.cy - y);

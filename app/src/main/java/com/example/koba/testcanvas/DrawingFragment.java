@@ -61,7 +61,7 @@ public class DrawingFragment extends Fragment {
     private DrawingView drawingView;
     private ShapeManager shapeManager;
     /** 操作モードのリスト */
-    private final List<State> stateList = Arrays.asList(State.DRAWING, State.TRANSFER, State.COPY);
+    private final List<State> stateList = Arrays.asList(State.DRAWING, State.TRANSFER, State.COPY, State.IDSETTING);
     /** ファイル保存先ディレクトリ名 */
     private File saveDir;
     /** ファイル名の共通部分 */
@@ -76,10 +76,12 @@ public class DrawingFragment extends Fragment {
     private static final int REQUEST_CODE_SAVE_DIALOG = 0;
     /** Intent受け取り用 上書き確認 */
     private static final int REQUEST_CODE_REWRITE_DIALOG = 1;
-    /** Intent受け取り用 ダイアログから文字列取得 */
-    private static final int REQUEST_CODE_SET_STRING = 2;
+    /** Intent受け取り用 ダイアログから文字列取得 TEXT要素 */
+    private static final int REQUEST_CODE_SET_TEXT = 2;
     /** Intent受け取り用 ファイルパス取得 */
     private static final int REQUEST_CODE_SELECT_LOAD_FILE = 3;
+    /** Intent受け取り用 ダイアログから文字列取得 ID属性 */
+    private static final int REQUEST_CODE_SET_ATTR_ID = 4;
 
     private static final String BUNDLE_KEY_STATE = "DrawingFragmentState";
     private static final String BUNDLE_KEY_SHAPETYPE = "DrawingFragmentShapeType";
@@ -108,7 +110,7 @@ public class DrawingFragment extends Fragment {
                 // ダイアログ生成後、TextDialogFragmentからインテントを受け取って、
                 // onActivityResult()でテキストを設定する
                 final TextDialogFragment df = TextDialogFragment.newInstance(self,
-                        REQUEST_CODE_SET_STRING);
+                        REQUEST_CODE_SET_TEXT, "Text", "");
                 final FragmentManager fm = getFragmentManager();
                 if (fm != null)
                     df.show(fm, "textDialog");
@@ -186,6 +188,10 @@ public class DrawingFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 shapeManager.fix();
                 setState(stateList.get(position));
+
+                // 変更した時点でID入力を求める
+                if (state == State.IDSETTING)
+                    inputAttrId();
             }
 
             @Override
@@ -285,6 +291,9 @@ public class DrawingFragment extends Fragment {
                 shapeManager.copy(x, y);
                 shapeManager.preTransfer(x, y);
                 break;
+            case IDSETTING:
+                inputAttrId();
+                break;
         }
         v.invalidate();  // 再描画
     }
@@ -299,6 +308,9 @@ public class DrawingFragment extends Fragment {
                 break;
             case COPY:
                 setState(State.TRANSFER);  // 複製後は移動する
+                break;
+            case IDSETTING:
+                // 何もしない
                 break;
         }
         v.invalidate();
@@ -315,7 +327,23 @@ public class DrawingFragment extends Fragment {
             case COPY:
                 setState(State.TRANSFER);  // 複製後は移動する
                 break;
+            case IDSETTING:
+                // 何もしない
+                break;
         }
+    }
+
+    /**
+     * ID属性の入力を求める
+     */
+    private void inputAttrId() {
+        // ダイアログ生成後、TextDialogFragmentからインテントを受け取って、
+        // onActivityResult()でテキストを設定する
+        final TextDialogFragment df = TextDialogFragment.newInstance(this,
+                REQUEST_CODE_SET_ATTR_ID, "ID", shapeManager.getAttrId());
+        final FragmentManager fm = getFragmentManager();
+        if (fm != null)
+            df.show(fm, "idDialog");
     }
 
     /**
@@ -383,7 +411,7 @@ public class DrawingFragment extends Fragment {
             case REQUEST_CODE_REWRITE_DIALOG:
                 resultRewriteDialog(resultCode, data);
                 break;
-            case REQUEST_CODE_SET_STRING:
+            case REQUEST_CODE_SET_TEXT:
                 shapeManager.setText(data.getStringExtra(Intent.EXTRA_TEXT));
                 drawingView.invalidate();
                 break;
@@ -392,6 +420,9 @@ public class DrawingFragment extends Fragment {
                     final Uri uri = data.getData();
                     loadSvg(uri);
                 }
+                break;
+            case REQUEST_CODE_SET_ATTR_ID:
+                shapeManager.setAttrId(data.getStringExtra(Intent.EXTRA_TEXT));
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -667,7 +698,9 @@ public class DrawingFragment extends Fragment {
         /** 図形移動モード */
         TRANSFER(R.string.button_state_transfer),
         /** 図形複製モード */
-        COPY(R.string.button_state_copy);
+        COPY(R.string.button_state_copy),
+        /** 図形ID属性設定モード */
+        IDSETTING(R.string.button_state_idsetting);
 
         private final int id;
 

@@ -77,6 +77,11 @@ class ShapeText extends ShapeBase {
     }
 
     @Override
+    String getAttrId() {
+        return attrId;
+    }
+
+    @Override
     void setPoint(float x, float y) {
         // 何もしない
     }

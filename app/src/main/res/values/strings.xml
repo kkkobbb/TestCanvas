@@ -12,6 +12,7 @@
     <string name="button_state_draw">描画</string>
     <string name="button_state_transfer">移動</string>
     <string name="button_state_copy">複製</string>
+    <string name="button_state_idsetting">ID設定</string>
 
     <string name="shape_base">無</string>
     <string name="shape_line">直線</string>

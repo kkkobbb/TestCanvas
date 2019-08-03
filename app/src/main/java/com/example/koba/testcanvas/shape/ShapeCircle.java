@@ -76,6 +76,11 @@ class ShapeCircle extends ShapeBase {
     }
 
     @Override
+    String getAttrId() {
+        return attrId;
+    }
+
+    @Override
     void setPoint(float x, float y) {
         // (x, y)と中心との距離がrとなる
         final float distanceSquare = (x - this.x) * (x - this.x) + (y - this.y) * (y - this.y);

@@ -26,15 +26,19 @@ import java.util.Objects;
  */
 public class TextDialogFragment extends DialogFragment {
     private static final String KEY_BR = "br";
+    private static final String KEY_INIT_TEXT = "initText";
+    private static final String KEY_TITLE = "Title";
     private static final String KEY_INPUT_TEXT = "inputText";
     private EditText editText;
 
-    static TextDialogFragment newInstance(Fragment target, int requestCode) {
+    static TextDialogFragment newInstance(Fragment target, int requestCode, String title, String initText) {
         final TextDialogFragment frag = new TextDialogFragment();
         frag.setTargetFragment(target, requestCode);
         final Bundle args = new Bundle();
         final String br_ = System.getProperty("line.separator");  // 改行文字
         args.putString(KEY_BR, br_);
+        args.putString(KEY_TITLE, title);
+        args.putString(KEY_INIT_TEXT, initText);
         frag.setArguments(args);
         return frag;
     }
@@ -55,6 +59,8 @@ public class TextDialogFragment extends DialogFragment {
         final Activity activity = Objects.requireNonNull(getActivity());
         final Bundle args = Objects.requireNonNull(getArguments());
         final String br = Objects.requireNonNull(args.getString(KEY_BR));
+        final String title = Objects.requireNonNull(args.getString(KEY_TITLE));
+        final String initText = Objects.requireNonNull(args.getString(KEY_INIT_TEXT));
         final Fragment target = getTargetFragment();
 
         editText = new EditText(activity);
@@ -63,6 +69,8 @@ public class TextDialogFragment extends DialogFragment {
             final String inputText = savedInstanceState.getString(KEY_INPUT_TEXT);
             if (inputText != null)
                 editText.setText(inputText);
+        } else {
+            editText.setText(initText);
         }
         final InputFilter[] filters = {new InputFilter() {
             @Override
@@ -76,7 +84,7 @@ public class TextDialogFragment extends DialogFragment {
             }}};
         editText.setFilters(filters);
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Text");
+        builder.setTitle(title);
         builder.setView(editText);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

@@ -76,6 +76,12 @@ abstract class ShapeBase implements Serializable {
     abstract void setAttrId(String attrId);
 
     /**
+     * svgでのID族税を取得する
+     * @return ID属性の値
+     */
+    abstract String getAttrId();
+
+    /**
      * 末端の座標の変更
      * @param x 新しい末端のx座標
      * @param y 新しい末端のy座標

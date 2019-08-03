@@ -167,6 +167,32 @@ public final class ShapeManager {
     }
 
     /**
+     * 図形にID属性を設定する <br>
+     * IDが一意かどうかは確認しない
+     * @param attrId ID属性
+     */
+    public void setAttrId(String attrId) {
+        if (shapeList.isEmpty())
+            return;
+        shapeList.getLast().setAttrId(attrId);
+    }
+
+    /**
+     * 図形のID属性を取得する <br>
+     * 設定されていない場合は空文字列を返す
+     * @return ID属性
+     */
+    public String getAttrId() {
+        if (shapeList.isEmpty())
+            return "";
+
+        String attrId = shapeList.getLast().getAttrId();
+        if (attrId == null)
+            return "";
+        return attrId;
+    }
+
+    /**
      * 図形の描画開始
      * @param x 描画する位置のx座標
      * @param y 描画する位置のy座標

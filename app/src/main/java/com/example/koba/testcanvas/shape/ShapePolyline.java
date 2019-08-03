@@ -97,6 +97,11 @@ class ShapePolyline extends ShapeBase {
     }
 
     @Override
+    String getAttrId() {
+        return attrId;
+    }
+
+    @Override
     void setPoint(float x, float y) {
         final int lastIndex = pointList.size() - 1;
         pointList.set(lastIndex - 1, x);

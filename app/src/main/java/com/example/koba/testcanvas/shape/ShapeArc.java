@@ -231,6 +231,11 @@ class ShapeArc extends ShapeBase {
     }
 
     @Override
+    String getAttrId() {
+        return attrId;
+    }
+
+    @Override
     void setPoint(float x, float y) {
         switch (state) {
             case CHANGE_POINT:

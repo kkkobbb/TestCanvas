@@ -81,6 +81,11 @@ class ShapeLine extends ShapeBase {
     }
 
     @Override
+    String getAttrId() {
+        return attrId;
+    }
+
+    @Override
     void setPoint(float x, float y) {
         this.x2 = x;
         this.y2 = y;
