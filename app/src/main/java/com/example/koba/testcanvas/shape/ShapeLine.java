@@ -8,6 +8,7 @@ class ShapeLine extends ShapeBase {
     private float y1;
     private float x2;
     private float y2;
+    private String attrId = null;
 
     ShapeLine(float x, float y, Paint paint) {
         super(paint);
@@ -66,11 +67,17 @@ class ShapeLine extends ShapeBase {
         svg.setStrokeColor(getPaint().getColor());
         svg.setStrokeWidth(getPaint().getStrokeWidth());
         svg.addLine(x1, y1, x2, y2);
+        svg.setAttrId(attrId);
     }
 
     @Override
     void draw(Canvas canvas) {
         canvas.drawLine(x1, y1, x2, y2, getPaint());
+    }
+
+    @Override
+    void setAttrId(String attrId) {
+        this.attrId = attrId;
     }
 
     @Override

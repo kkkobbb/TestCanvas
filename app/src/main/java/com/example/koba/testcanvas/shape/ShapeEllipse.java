@@ -8,6 +8,7 @@ class ShapeEllipse extends ShapeBase {
     private float cy;
     private float rx;
     private float ry;
+    private String attrId = null;
 
     ShapeEllipse(float x, float y, Paint paint) {
         super(paint);
@@ -66,6 +67,7 @@ class ShapeEllipse extends ShapeBase {
         svg.setStrokeColor(getPaint().getColor());
         svg.setStrokeWidth(getPaint().getStrokeWidth());
         svg.addEllipse(cx, cy, rx, ry);
+        svg.setAttrId(attrId);
     }
 
     @Override
@@ -75,6 +77,11 @@ class ShapeEllipse extends ShapeBase {
         final float x2 = cx + rx;
         final float y2 = cy + ry;
         canvas.drawOval(x1, y1, x2, y2, getPaint());
+    }
+
+    @Override
+    void setAttrId(String attrId) {
+        this.attrId = attrId;
     }
 
     @Override

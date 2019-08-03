@@ -138,7 +138,8 @@ class TinySvgReader implements ISvgReader {
         final double cx = Double.parseDouble(elem.getAttribute("cx"));
         final double cy = Double.parseDouble(elem.getAttribute("cy"));
         final double r = Double.parseDouble(elem.getAttribute("r"));
-        onCircleListener.onCircle(this, cx, cy, r);
+        final String attrId = elem.getAttribute("id");
+        onCircleListener.onCircle(this, cx, cy, r, attrId);
     }
 
     /**
@@ -153,7 +154,8 @@ class TinySvgReader implements ISvgReader {
         final double cy = Double.parseDouble(elem.getAttribute("cy"));
         final double rx = Double.parseDouble(elem.getAttribute("rx"));
         final double ry = Double.parseDouble(elem.getAttribute("ry"));
-        onEllipseListener.onEllipse(this, cx, cy, rx, ry);
+        final String attrId = elem.getAttribute("id");
+        onEllipseListener.onEllipse(this, cx, cy, rx, ry, attrId);
     }
 
     /**
@@ -169,7 +171,8 @@ class TinySvgReader implements ISvgReader {
         final double y1 = Double.parseDouble(elem.getAttribute("y1"));
         final double x2 = Double.parseDouble(elem.getAttribute("x2"));
         final double y2 = Double.parseDouble(elem.getAttribute("y2"));
-        onLineListener.onLine(this, x1, y1, x2, y2);
+        final String attrId = elem.getAttribute("id");
+        onLineListener.onLine(this, x1, y1, x2, y2, attrId);
     }
 
     /**
@@ -226,8 +229,10 @@ class TinySvgReader implements ISvgReader {
         final double x = xy[0];
         final double y = xy[1];
 
+        final String attrId = elem.getAttribute("id");
+
         onPathArcListener.onPathArc(this, mx, my, rx, ry,
-                xAxisRotation, largeArcFlag, sweepFlag, x, y);
+                xAxisRotation, largeArcFlag, sweepFlag, x, y, attrId);
     }
 
     /**
@@ -255,7 +260,8 @@ class TinySvgReader implements ISvgReader {
         parseAttr(elem);
         final String pointsStr = elem.getAttribute("points");
         final List<Double> points = getPointList(pointsStr);
-        onPolygonListener.onPolygon(this, points);
+        final String attrId = elem.getAttribute("id");
+        onPolygonListener.onPolygon(this, points, attrId);
     }
 
     /**
@@ -268,7 +274,8 @@ class TinySvgReader implements ISvgReader {
         parseAttr(elem);
         final String pointsStr = elem.getAttribute("points");
         final List<Double> points = getPointList(pointsStr);
-        onPolylineListener.onPolyline(this, points);
+        final String attrId = elem.getAttribute("id");
+        onPolylineListener.onPolyline(this, points, attrId);
     }
 
     /**
@@ -283,7 +290,8 @@ class TinySvgReader implements ISvgReader {
         final double y = Double.parseDouble(elem.getAttribute("y"));
         final double width = Double.parseDouble(elem.getAttribute("width"));
         final double height = Double.parseDouble(elem.getAttribute("height"));
-        onRectListener.onRect(this, x, y, width, height);
+        final String attrId = elem.getAttribute("id");
+        onRectListener.onRect(this, x, y, width, height, attrId);
     }
 
     /**
@@ -297,7 +305,8 @@ class TinySvgReader implements ISvgReader {
         final double x = Double.parseDouble(elem.getAttribute("x"));
         final double y = Double.parseDouble(elem.getAttribute("y"));
         final String str = elem.getTextContent();
-        onTextListener.onText(this, x, y, str);
+        final String attrId = elem.getAttribute("id");
+        onTextListener.onText(this, x, y, str, attrId);
     }
 
     /**

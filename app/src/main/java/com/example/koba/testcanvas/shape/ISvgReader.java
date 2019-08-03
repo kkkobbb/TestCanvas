@@ -109,7 +109,7 @@ interface ISvgReader {
          * @param cy 中心のy座標
          * @param r 半径
          */
-        void onCircle(ISvgReader svg, double cx, double cy, double r);
+        void onCircle(ISvgReader svg, double cx, double cy, double r, String attrId);
     }
 
     interface OnEllipseListener extends EventListener {
@@ -121,7 +121,7 @@ interface ISvgReader {
          * @param rx x軸方向の半径
          * @param ry y軸方向の半径
          */
-        void onEllipse(ISvgReader svg, double cx, double cy, double rx, double ry);
+        void onEllipse(ISvgReader svg, double cx, double cy, double rx, double ry, String attrId);
     }
 
     interface OnLineListener extends EventListener {
@@ -133,7 +133,7 @@ interface ISvgReader {
          * @param x2 終点のx座標
          * @param y2 終点のy座標
          */
-        void onLine(ISvgReader svg, double x1, double y1, double x2, double y2);
+        void onLine(ISvgReader svg, double x1, double y1, double x2, double y2, String attrId);
     }
 
     interface OnPathArcListener extends EventListener {
@@ -153,7 +153,8 @@ interface ISvgReader {
         void onPathArc(ISvgReader svg, double mx, double my,
                        double rx, double ry, double xAxisRotation,
                        boolean largeArcFlag, boolean sweepFlag,
-                       double x, double y);
+                       double x, double y,
+                       String attrId);
     }
 
     interface OnPolygonListener extends EventListener {
@@ -162,7 +163,7 @@ interface ISvgReader {
          * @param svg svgデータ
          * @param points 各点の座標 x座標, y座標, x座標 ... の繰り返し
          */
-        void onPolygon(ISvgReader svg, List<Double> points);
+        void onPolygon(ISvgReader svg, List<Double> points, String attrId);
     }
 
     interface OnPolylineListener extends EventListener {
@@ -171,7 +172,7 @@ interface ISvgReader {
          * @param svg svgデータ
          * @param points 各点の座標 x座標, y座標, x座標 ... の繰り返し
          */
-        void onPolyline(ISvgReader svg, List<Double> points);
+        void onPolyline(ISvgReader svg, List<Double> points, String attrId);
     }
 
     interface OnRectListener extends EventListener {
@@ -183,7 +184,7 @@ interface ISvgReader {
          * @param width 幅
          * @param height 高さ
          */
-        void onRect(ISvgReader svg, double x, double y, double width, double height);
+        void onRect(ISvgReader svg, double x, double y, double width, double height, String attrId);
     }
 
     interface OnTextListener extends EventListener {
@@ -193,6 +194,6 @@ interface ISvgReader {
          * @param y 始点のy座標
          * @param str 表示する文字列
          */
-        void onText(ISvgReader svg, double x, double y, String str);
+        void onText(ISvgReader svg, double x, double y, String str, String attrId);
     }
 }

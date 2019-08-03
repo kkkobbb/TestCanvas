@@ -94,6 +94,16 @@ class TinySvgWriter implements ISvgWriter {
         this.fontSize = fontSize;
     }
 
+    @Override
+    public void setAttrId(String attrId) {
+        final Element last = (Element)document.getDocumentElement().getLastChild();
+        if (last == null)
+            return;
+
+        if (attrId != null)
+            last.setAttribute("id", attrId);
+    }
+
     /**
      * 線の見た目を設定する
      * @param shape 設定する図形

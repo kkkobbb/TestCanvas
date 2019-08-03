@@ -7,6 +7,7 @@ class ShapeCircle extends ShapeBase {
     private float x;
     private float y;
     private float r;
+    private String attrId = null;
 
     ShapeCircle(float x, float y, Paint paint) {
         super(paint);
@@ -61,11 +62,17 @@ class ShapeCircle extends ShapeBase {
         svg.setStrokeColor(getPaint().getColor());
         svg.setStrokeWidth(getPaint().getStrokeWidth());
         svg.addCircle(x, y, r);
+        svg.setAttrId(attrId);
     }
 
     @Override
     void draw(Canvas canvas) {
         canvas.drawCircle(x, y, r, getPaint());
+    }
+
+    @Override
+    void setAttrId(String attrId) {
+        this.attrId = attrId;
     }
 
     @Override

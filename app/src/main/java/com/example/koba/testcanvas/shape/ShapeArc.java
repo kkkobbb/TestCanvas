@@ -25,6 +25,8 @@ class ShapeArc extends ShapeBase {
     private boolean largeArcFlag;
     private boolean sweepFlag;
 
+    private String attrId = null;
+
     ShapeArc(float x, float y, Paint paint) {
         super(paint);
 
@@ -215,11 +217,17 @@ class ShapeArc extends ShapeBase {
         final double rx = Math.abs(x1 - x2) / 2;
         final double ry = Math.abs(y1 - y2) / 2;
         svg.addPathArc(startX, startY, rx, ry, 0, largeArcFlag, sweepFlag, endX, endY);
+        svg.setAttrId(attrId);
     }
 
     @Override
     void draw(Canvas canvas) {
         canvas.drawArc(x1, y1, x2, y2, startAngle, sweepAngle, false, getPaint());
+    }
+
+    @Override
+    void setAttrId(String attrId) {
+        this.attrId = attrId;
     }
 
     @Override

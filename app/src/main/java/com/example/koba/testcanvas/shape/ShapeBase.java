@@ -70,6 +70,12 @@ abstract class ShapeBase implements Serializable {
     abstract void draw(Canvas canvas);
 
     /**
+     * svgでのID属性を設定する
+     * @param attrId ID属性の値
+     */
+    abstract void setAttrId(String attrId);
+
+    /**
      * 末端の座標の変更
      * @param x 新しい末端のx座標
      * @param y 新しい末端のy座標

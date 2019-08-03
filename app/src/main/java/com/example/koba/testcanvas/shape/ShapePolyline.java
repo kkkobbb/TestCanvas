@@ -11,6 +11,7 @@ class ShapePolyline extends ShapeBase {
     private float x;
     private float y;
     private ArrayList<Float> pointList;
+    private String attrId = null;
 
     ShapePolyline(float x, float y, Paint paint) {
         super(paint);
@@ -78,6 +79,7 @@ class ShapePolyline extends ShapeBase {
         for(double point : pointList)
             dList.add(point);
         svg.addPolyline(x, y, dList);
+        svg.setAttrId(attrId);
     }
 
     @Override
@@ -87,6 +89,11 @@ class ShapePolyline extends ShapeBase {
         for(int i = 0; i < pointList.size(); i += 2)
             path.lineTo(pointList.get(i), pointList.get(i + 1));
         canvas.drawPath(path, getPaint());
+    }
+
+    @Override
+    void setAttrId(String attrId) {
+        this.attrId = attrId;
     }
 
     @Override

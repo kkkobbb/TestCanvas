@@ -40,6 +40,12 @@ interface ISvgWriter {
     void setFontSize(float fontSize);
 
     /**
+     * 最後に追加したノードにID属性を設定する
+     * @param attrId ID属性
+     */
+    void setAttrId(String attrId);
+
+    /**
      * 円の追加
      * @param cx 中心のx座標
      * @param cy 中心のy座標
