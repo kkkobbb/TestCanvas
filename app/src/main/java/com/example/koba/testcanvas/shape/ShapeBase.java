@@ -13,6 +13,7 @@ import java.io.Serializable;
  * <ol>
  *     派生クラス実装時の注意点
  *     <li> (float, float, Paint)のコンストラクタを作成すること </li>
+ *     <li> SVGファイルからの読み込み用に static Shape* newFromSvg(*)メソッドを実装すること </li>
  *     <li> シリアライズ化可能であること </li>
  * </ol>
  */
@@ -22,6 +23,7 @@ abstract class ShapeBase implements Serializable {
     //   * シリアライズ化する変数を変更することがほぼない
     //   * 一時保存用なので読み込み失敗しても問題ない
     private transient Paint paint;  // writeObject() readObject()でシリアライズ対応する
+    private String attrId = null;  // ID属性
 
     ShapeBase(Paint paint) {
         this.paint = new Paint(paint);
@@ -73,13 +75,17 @@ abstract class ShapeBase implements Serializable {
      * svgでのID属性を設定する
      * @param attrId ID属性の値
      */
-    abstract void setAttrId(String attrId);
+    void setAttrId(String attrId) {
+        this.attrId = attrId;
+    }
 
     /**
      * svgでのID族税を取得する
      * @return ID属性の値
      */
-    abstract String getAttrId();
+    String getAttrId() {
+        return attrId;
+    }
 
     /**
      * 末端の座標の変更

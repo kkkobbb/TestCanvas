@@ -25,8 +25,7 @@ class ShapeArc extends ShapeBase {
     private boolean largeArcFlag;
     private boolean sweepFlag;
 
-    private String attrId = null;
-
+    @SuppressWarnings("unused")  // ShapeManagerでリフレクションによってのみ呼び出される
     ShapeArc(float x, float y, Paint paint) {
         super(paint);
 
@@ -185,15 +184,6 @@ class ShapeArc extends ShapeBase {
         if (Math.abs(rx - ry) > 0.01)  // 真円以外に未対応 (誤差の許容)
             return null;
 
-        // 半円の場合、(float, float, paint)コンストラクタを使う
-        final double pointsDistance2 = Math.pow(mx - x, 2) + Math.pow(my - y, 2);
-        final double dia = Math.pow(rx * 2, 2);  // 直径の2乗
-        if (Math.abs(pointsDistance2 - dia) < 0.01) {  // 誤差の許容
-            final ShapeArc shape = new ShapeArc((float)mx, (float)my, paint);
-            shape.changePoint((float)x, (float)y);
-            return shape;
-        }
-
         return new ShapeArc(mx, my, rx, largeArcFlag, sweepFlag, x, y, paint);
     }
 
@@ -217,22 +207,12 @@ class ShapeArc extends ShapeBase {
         final double rx = Math.abs(x1 - x2) / 2;
         final double ry = Math.abs(y1 - y2) / 2;
         svg.addPathArc(startX, startY, rx, ry, 0, largeArcFlag, sweepFlag, endX, endY);
-        svg.setAttrId(attrId);
+        svg.setAttrId(getAttrId());
     }
 
     @Override
     void draw(Canvas canvas) {
         canvas.drawArc(x1, y1, x2, y2, startAngle, sweepAngle, false, getPaint());
-    }
-
-    @Override
-    void setAttrId(String attrId) {
-        this.attrId = attrId;
-    }
-
-    @Override
-    String getAttrId() {
-        return attrId;
     }
 
     @Override

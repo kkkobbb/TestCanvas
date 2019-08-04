@@ -11,8 +11,8 @@ class ShapePolygon extends ShapeBase {
     private float x;
     private float y;
     private ArrayList<Float> pointList;
-    private String attrId = null;
 
+    @SuppressWarnings("unused")  // ShapeManagerでリフレクションによってのみ呼び出される
     ShapePolygon(float x, float y, Paint paint) {
         super(paint);
 
@@ -79,7 +79,7 @@ class ShapePolygon extends ShapeBase {
         for(double point : pointList)
             dList.add(point);
         svg.addPolygon(x, y, dList);
-        svg.setAttrId(attrId);
+        svg.setAttrId(getAttrId());
     }
 
     @Override
@@ -90,16 +90,6 @@ class ShapePolygon extends ShapeBase {
             path.lineTo(pointList.get(i), pointList.get(i + 1));
         path.close();
         canvas.drawPath(path, getPaint());
-    }
-
-    @Override
-    void setAttrId(String attrId) {
-        this.attrId = attrId;
-    }
-
-    @Override
-    String getAttrId() {
-        return attrId;
     }
 
     @Override

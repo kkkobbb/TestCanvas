@@ -59,8 +59,6 @@ public class TextDialogFragment extends DialogFragment {
         final Activity activity = Objects.requireNonNull(getActivity());
         final Bundle args = Objects.requireNonNull(getArguments());
         final String br = Objects.requireNonNull(args.getString(KEY_BR));
-        final String title = Objects.requireNonNull(args.getString(KEY_TITLE));
-        final String initText = Objects.requireNonNull(args.getString(KEY_INIT_TEXT));
         final Fragment target = getTargetFragment();
 
         editText = new EditText(activity);
@@ -70,6 +68,7 @@ public class TextDialogFragment extends DialogFragment {
             if (inputText != null)
                 editText.setText(inputText);
         } else {
+            final String initText = Objects.requireNonNull(args.getString(KEY_INIT_TEXT));
             editText.setText(initText);
         }
         final InputFilter[] filters = {new InputFilter() {
@@ -84,7 +83,10 @@ public class TextDialogFragment extends DialogFragment {
             }}};
         editText.setFilters(filters);
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        final String title = Objects.requireNonNull(args.getString(KEY_TITLE));
         builder.setTitle(title);
+
         builder.setView(editText);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

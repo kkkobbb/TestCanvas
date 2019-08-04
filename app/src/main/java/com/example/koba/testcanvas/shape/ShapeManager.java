@@ -182,6 +182,7 @@ public final class ShapeManager {
      * 設定されていない場合は空文字列を返す
      * @return ID属性
      */
+    @NonNull
     public String getAttrId() {
         if (shapeList.isEmpty())
             return "";

@@ -8,8 +8,8 @@ class ShapeText extends ShapeBase {
     private float x;
     private float y;
     private String str;
-    private String attrId = null;
 
+    @SuppressWarnings("unused")  // ShapeManagerでリフレクションによってのみ呼び出される
     ShapeText(float x, float y, Paint paint) {
         super(paint);
 
@@ -63,22 +63,12 @@ class ShapeText extends ShapeBase {
         svg.setStrokeColor(getPaint().getColor());
         svg.setFontSize(getPaint().getTextSize());
         svg.addText(x, y, str);
-        svg.setAttrId(attrId);
+        svg.setAttrId(getAttrId());
     }
 
     @Override
     void draw(Canvas canvas) {
         canvas.drawText(str, x, y, getPaint());
-    }
-
-    @Override
-    void setAttrId(String attrId) {
-        this.attrId = attrId;
-    }
-
-    @Override
-    String getAttrId() {
-        return attrId;
     }
 
     @Override

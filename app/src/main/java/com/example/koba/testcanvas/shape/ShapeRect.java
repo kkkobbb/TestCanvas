@@ -8,8 +8,8 @@ class ShapeRect extends ShapeBase {
     private float y1;
     private float x2;
     private float y2;
-    private String attrId = null;
 
+    @SuppressWarnings("unused")  // ShapeManagerでリフレクションによってのみ呼び出される
     ShapeRect(float x, float y, Paint paint) {
         super(paint);
 
@@ -76,22 +76,12 @@ class ShapeRect extends ShapeBase {
         final double width = Math.abs(x2 - x1);
         final double height = Math.abs(y2 - y1);
         svg.addRect(x, y, width, height);
-        svg.setAttrId(attrId);
+        svg.setAttrId(getAttrId());
     }
 
     @Override
     void draw(Canvas canvas) {
         canvas.drawRect(x1, y1, x2, y2, getPaint());
-    }
-
-    @Override
-    void setAttrId(String attrId) {
-        this.attrId = attrId;
-    }
-
-    @Override
-    String getAttrId() {
-        return attrId;
     }
 
     @Override
